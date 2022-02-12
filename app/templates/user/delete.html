@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block content %}
+    
+    <main role="main" class="inner cover">
+        <h1 class="cover-heading">ユーザ削除</h1>
+        <p class="lead pb-5">
+            ユーザを削除する場合は、メールアドレスを入力してください。
+        </p>
+        <form id="userDeleteForm" class="pb-5">
+            <div class="form-group">
+                <label class="form-label" for="loginId">メールアドレス</label>
+                <input class="form-control" id="inputLoginId" type="email" name="loginId">
+            </div>
+            <input type="submit" value="送信">
+        </form>
+    </main>
+
+    {% endblock %}

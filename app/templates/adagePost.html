@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block content %}
+    
+    <main role="main" class="inner cover">
+        <h1 class="cover-heading">あなたの座右の銘を共有してください！</h1>
+        <p class="lead pb-5">
+            このフォームではあなたの座右の銘を共有することができます。
+        </p>
+        <form id="adagePostForm" class="pb-5">
+            <div class="form-group">
+                <input class="form-control" id="inputTextTitle" type="text" name="title">
+            </div>
+            <input type="submit" value="送信">
+        </form>
+    </main>
+
+    {% endblock %}

@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block content %}
+    
+    <main role="main" class="inner cover">
+        <h1 class="cover-heading">あなたの座右の銘は？</h1>
+        <p class="lead pb-5">
+            簡潔であり美しい言葉には魂が宿ります。このページでは、それを口ずさみ、自分の座右の銘とし、さらには共有することができます。あなたの訪問に感謝します。
+        </p>
+        <div id="adageId" hidden></div>
+        <div id="firstView" hidden>
+            <h2 id="adageTitle" class="cover-adage">
+                "One for all All for one"
+            </h2>
+            <div class="d-flex justify-content-center pb-3">
+                <div class="LikesIcon">
+                    <i class="far fa-heart LikesIcon-fa-heart"></i>
+                </div>
+                <div id="likePoints" class="px-3">
+                    0
+                </div>
+                <div id="twitterShareButton">
+                    <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-text='"One for all All for one"' data-size="large" data-hashtags="格言共有" data-show-count="false">Tweet</a>
+                </div>
+            </div>
+        </div>
+        <p class="">
+            <a href="#" id="getAdageButton" class="btn btn-lg btn-secondary">タップしてください！</a>
+        </p>
+    </main>
+
+{% endblock %}
