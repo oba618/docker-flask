@@ -8,7 +8,7 @@ $(window).load(function(){
          * ログインリンクを変更
          */
         let navId = document.getElementById("navSession");
-        navId.innerHTML = "Setting";
+        navId.innerHTML = "設定";
 
         let newHref = navId.getAttribute('href').replace('login', 'setting');
         navId.setAttribute('href', newHref);
