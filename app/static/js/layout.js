@@ -1,24 +1,11 @@
 $(window).load(function(){
     "use strict";
 
-    const idToken = sessionStorage.getItem("idToken");
-
-    function changeNav() {
-        /**
-         * ログインリンクを変更
-         */
-        let navId = document.getElementById("navSession");
-        navId.innerHTML = "設定";
-
-        let newHref = navId.getAttribute('href').replace('login', 'setting');
-        navId.setAttribute('href', newHref);
-    }
-
     function activeHeaderNav() {
         /**
          * ヘッダーナビをパスに合わせてアクティブ化
          */
-        let navId = "";
+        let navId;
         const path_name = location.pathname;
 
         if(path_name == "/") {
@@ -37,8 +24,5 @@ $(window).load(function(){
         navId.classList.add("active");
     }
 
-    activeHeaderNav();
-    if(idToken) {
-        changeNav();
-    }
+    activeHeaderNav()
 });
