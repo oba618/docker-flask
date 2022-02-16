@@ -2,16 +2,25 @@
 {% block content %}
     
     <main role="main" class="inner cover">
+        <div class="alert alert-success" role="alert" id="nowLoginAlert" style="display: none">
+            ログインしました！
+        </div>
         <h1 class="cover-heading">あなたの座右の銘を共有してください！</h1>
         <p class="lead pb-5">
             このフォームではあなたの座右の銘を共有することができます。
         </p>
+        <div class="alert alert-danger" role="alert" id="loginAlert" style="display: none">
+            格言を共有するには、<a href="/user/login" class="alert-link">ログイン</a>>が必要です。
+        </div>
         <form id="adagePostForm" class="pb-5">
             <div class="form-group">
                 <input class="form-control" id="inputTextTitle" type="text" name="title">
             </div>
-            <input type="submit" value="送信">
+            <input id="postAdageButton" type="submit" value="送信">
         </form>
+        <div class="alert alert-success" role="alert" id="thanksAlert" style="display: none">
+            登録完了しました！共有ありがとうございます！
+        </div>
     </main>
 
     {% endblock %}

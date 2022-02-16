@@ -1,10 +1,13 @@
 import os 
+from datetime import timedelta
 
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, session
 
 
 port = int(os.environ['PORT'])
 app = Flask(__name__)
+app.secret_key = os.environ['SECRET_KEY']
+app.permanent_session_lifetime = timedelta(minutes=60) 
 
 
 @app.route('/')
@@ -72,17 +75,8 @@ def user_setting():
         'user/setting.html',
         input_values={
             'title': 'ユーザ設定',
-        },
-    )
-
-
-@app.route('/user/logout')
-def user_logout():
-    return render_template(
-        'index.html',
-        input_values={
-            'title': 'ホーム',
-            'js_file_name': 'home.js',
+            'js_path': 'user',
+            'js_file_name': 'setting.js',
         },
     )
 
@@ -121,6 +115,18 @@ def user_reset_password():
             'js_file_name': 'resetPassword.js',
         },
     )
+
+
+@app.route('/process/login')
+def process_login():
+    session['idToken'] = 'true'
+    return redirect('/adage/post')
+
+
+@app.route('/process/logout')
+def process_logout():
+    session.clear()
+    return redirect('/')
 
 
 if __name__ == '__main__':

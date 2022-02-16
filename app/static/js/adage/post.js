@@ -5,13 +5,11 @@ $(window).load(function(){
     
     const idToken = sessionStorage.getItem("idToken");
     const form = document.getElementById("adagePostForm");
+    const inputTextTitle = document.getElementById("inputTextTitle");
+    const postAdageButton = document.getElementById("postAdageButton");
 
-    // idTokenが空の場合
-    if(idToken === null) {
-        alert("格言登録はログイン後に可能です。ログインページに移動します。");
-        if(confirm) {
-            window.location.href = '/user/login';
-        }
+    function hiddenAlert(id) {
+        $(id).fadeOut();
     }
 
     form.addEventListener("submit", function (event) {
@@ -23,9 +21,9 @@ $(window).load(function(){
 
         // 成功の場合
         XHR.addEventListener("load", function(event) {
-            alert("送信に成功しました! 共有ありがとうございます!");
-            let inputTextTitle = document.getElementById("inputTextTitle");
+            $("#thanksAlert").fadeIn();
             inputTextTitle.value = "";
+            setTimeout(hiddenAlert, 15*1000, "#thanksAlert");
         });
     
         // 失敗の場合
@@ -40,4 +38,19 @@ $(window).load(function(){
         XHR.setRequestHeader( 'Authorization', idToken );
         XHR.send(JSON.stringify(formDataObj));
     });
+    console.log(idToken);
+
+    // idTokenが空の場合
+    if(idToken === null) {
+        $("#loginAlert").fadeIn();
+        inputTextTitle.disabled = true;
+        postAdageButton.disabled = true;
+    }
+
+    // ログインした場合
+    if(sessionStorage.getItem("nowLogin")) {
+        sessionStorage.removeItem("nowLogin");
+        $("#nowLoginAlert").fadeIn()
+        setTimeout(hiddenAlert, 15*1000, "#nowLoginAlert")
+    }
 });

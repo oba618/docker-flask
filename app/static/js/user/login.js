@@ -14,10 +14,10 @@ $(window).load(function(){
 
         // 成功の場合
         XHR.addEventListener("load", function(event) {
-            alert("ログイン完了しました")
             sessionStorage.setItem('idToken', XHR.response.idToken);
             sessionStorage.setItem('accessToken', XHR.response.accessToken);
-            window.location.href = '/adage/post';
+            sessionStorage.setItem('nowLogin', 'true');
+            window.location.href = '/process/login';
         });
     
         // 失敗の場合
