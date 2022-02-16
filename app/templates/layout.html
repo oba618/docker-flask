@@ -10,7 +10,7 @@
     {% endif %}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/myStyle.css') }}">
-    <link rel ="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body  class="text-center" >
 <div class="body-background">
@@ -24,7 +24,11 @@
             <nav class="nav nav-masthead justify-content-center">
                 <a id="navGet" class="nav-link" href="/">トップ</a>
                 <a id="navPost" class="nav-link" href="/adage/post">共有する</a>
+                {% if session['idToken'] %}
+                <a id="navSession" class="nav-link" href="/user/setting">設定</a>
+                {% else %}
                 <a id="navSession" class="nav-link" href="/user/login">ログイン</a>
+                {% endif %}
             </nav>
         </div>
     </header>
