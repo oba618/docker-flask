@@ -16,7 +16,7 @@ def index():
         'index.html',
         input_values={
             'title': 'ホーム',
-            'js_file_name': 'home.js',
+            'js_file_name': 'index.js',
         },
     )
 
