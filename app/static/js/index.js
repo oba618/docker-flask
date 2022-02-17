@@ -143,11 +143,4 @@ $(window).load(function(){
             $btn.children("i").attr('class', 'far fa-heart LikesIcon-fa-heart');
         },1000);
     })
-    
-    if(location.pathname == "/user/logout") {
-        sessionStorage.removeItem("idToken");
-        sessionStorage.removeItem("accessToken");
-        window.location.href = '/';
-    }
-    
 })
