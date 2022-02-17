@@ -24,7 +24,7 @@ def index():
 @app.route("/adage/post")
 def adage_post():
     return render_template(
-        'adagePost.html',
+        'adage/post.html',
         input_values={
             'title': '格言投稿フォーム',
             'js_path': 'adage',
