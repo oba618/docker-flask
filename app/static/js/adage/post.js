@@ -6,6 +6,7 @@ $(window).load(function(){
     const idToken = sessionStorage.getItem("idToken");
     const form = document.getElementById("adagePostForm");
     const inputTextTitle = document.getElementById("inputTextTitle");
+    const inputTextEpisode = document.getElementById("inputTextEpisode");
     const postAdageButton = document.getElementById("postAdageButton");
 
     function hiddenAlert(id) {
@@ -23,6 +24,7 @@ $(window).load(function(){
         XHR.addEventListener("load", function(event) {
             $("#thanksAlert").fadeIn();
             inputTextTitle.value = "";
+            inputTextEpisode.value = "";
             setTimeout(hiddenAlert, 15*1000, "#thanksAlert");
         });
     
@@ -44,6 +46,7 @@ $(window).load(function(){
     if(idToken === null) {
         $("#loginAlert").fadeIn();
         inputTextTitle.disabled = true;
+        inputTextEpisode.disabled = true;
         postAdageButton.disabled = true;
     }
 
