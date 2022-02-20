@@ -1,9 +1,27 @@
 import { Const } from "./common/const.js";
 
+
 $(window).load(function(){
     "use strict";
     
-    let first_view = document.getElementById("firstView");
+    const vmAdageContainer = Vue.createApp({
+        data() {
+            return {
+                adages: []
+            }
+        },
+        methods: {
+            increasePoints(index) {
+                getLikesIconId(index)
+
+                this.adages[index].likePoints++;
+            }
+        }
+    }).mount("#adageContainer")
+
+    const getAdageButton = document.getElementById("getAdageButton");
+    const likePoints = document.getElementById("likePoints")
+    
     let adage_list = [];
     let index_number = 0;
 
@@ -11,9 +29,15 @@ $(window).load(function(){
         /**
          * 格言を結果に追加
          */
-        $("#adageId").text(adage.adageId);
-        $("#adageTitle").text('"' + adage.title + '"');
-        $("#likePoints").text(adage.likePoints);
+
+        const item = {
+            adageId: adage.adageId,
+            title: adage.title,
+            likePoints: adage.likePoints
+        }
+
+        vmAdageContainer.adages.push(item)
+        location.href = '/#getButton'
     }
 
     function getAdage() {
@@ -21,8 +45,6 @@ $(window).load(function(){
          * 格言を取得
          * return {any} 格言
          */
-        let adage;
-
         $.ajax({
             type: "GET",
             url: [Const.BASE_PATH, "adage"].join("/"),
@@ -44,13 +66,14 @@ $(window).load(function(){
         return adage_list;
     }
 
-    function fixTwitterShareButton(twitterShareButton, adageTitle) {
+    const fixTwitterShareButton = function fixTwitterShareButton(adageTitle) {
         /**
          * ツイートシェアボタンを修正
          */
-
+        const twitterShareButton = document.getElementById('twitterShareButton' + index_number);
+        console.log(twitterShareButton);
         // ボタン削除
-        while(twitterShareButton.lastChild){
+        if(twitterShareButton.lastChild){
             twitterShareButton.removeChild(twitterShareButton.lastChild);
         }
 
@@ -68,6 +91,8 @@ $(window).load(function(){
         script.setAttribute("src", Const.TWITTER_WIDGETS_URL);
         twitterShareButton.appendChild(a);
         twitterShareButton.appendChild(script);
+
+        index_number++;
     }
 
     function updateLikePoints(adageId) {
@@ -92,25 +117,20 @@ $(window).load(function(){
         });
     }
 
-    function increaseLikePoints() {
+    function increaseLikePoints(suffix) {
         /**
          * いいねポイントを増やす
          */
-        var likePoints = parseInt(
-            document.getElementById('likePoints').textContent, 10);
-        likePoints++;
-        $("#likePoints").text(likePoints);
+        const likePoints = document.getElementsByName("likePoints" + suffix);
+        let points = parseInt(likePoints.textContent, 10);
+        points++;
+        likePoints.innerText = points;
     }
 
-    $("#getAdageButton").click(function (e) {
+    getAdageButton.addEventListener("click", () =>{
         /**
          * 格言取得ボタン: クリックイベントハンドラ
          */
-        if(first_view.hidden == true) {
-            first_view.hidden = false;
-        }
-
-        $("#adageTitle").text("Now Loading ...");
 
         // 格言リスト取得
         if(!adage_list.length) {
@@ -118,29 +138,23 @@ $(window).load(function(){
         }
 
         let adage = adage_list[index_number];
-        index_number++;
-        if(adage_list.length == index_number) {
-            index_number = 0;
+        if(adage_list.length > index_number) {
+            showAdage(adage);
+            setTimeout(fixTwitterShareButton, 1, adage.title);
         }
-
-        showAdage(adage);
-        fixTwitterShareButton(document.getElementById('twitterShareButton'), adage.title);
     });
 
-    $('.LikesIcon').click(function() {
+    function getLikesIconId(index) {
         /**
          * いいねボタン: クリックイベントハンドラ
          */
-        let $btn = $(this);
-        let adageId = document.getElementById('adageId').textContent
-
-        $btn.children("i").attr('class', 'fas fa-heart LikesIcon-fa-heart heart');
-
+        const adageId = document.getElementById('adageId' + index).textContent
         updateLikePoints(adageId)
-        increaseLikePoints()
-
+        
+        const likesIcon = document.getElementById("LikesIcon" + index);
+        likesIcon.firstChild.className = 'fas fa-heart LikesIcon-fa-heart heart';
         setTimeout(function() {
-            $btn.children("i").attr('class', 'far fa-heart LikesIcon-fa-heart');
+            likesIcon.firstChild.className = 'far fa-heart LikesIcon-fa-heart';
         },1000);
-    })
+    }
 })

@@ -17,7 +17,7 @@ $(window).load(function(){
             sessionStorage.setItem('idToken', XHR.response.idToken);
             sessionStorage.setItem('accessToken', XHR.response.accessToken);
             sessionStorage.setItem('nowLogin', 'true');
-            window.location.href = '/process/login';
+            location.href = '/process/login';
         });
     
         // 失敗の場合
