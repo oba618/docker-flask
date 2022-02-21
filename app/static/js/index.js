@@ -3,21 +3,6 @@ import { Const } from "./common/const.js";
 
 $(window).load(function(){
     "use strict";
-    
-    const vmAdageContainer = Vue.createApp({
-        data() {
-            return {
-                adages: []
-            }
-        },
-        methods: {
-            increasePoints(index) {
-                getLikesIconId(index)
-
-                this.adages[index].likePoints++;
-            }
-        }
-    }).mount("#adageContainer")
 
     const getAdageButton = document.getElementById("getAdageButton");
     const likePoints = document.getElementById("likePoints")
@@ -37,7 +22,6 @@ $(window).load(function(){
         }
 
         vmAdageContainer.adages.push(item)
-        location.href = '/#getButton'
     }
 
     function getAdage() {
@@ -127,23 +111,6 @@ $(window).load(function(){
         likePoints.innerText = points;
     }
 
-    getAdageButton.addEventListener("click", () =>{
-        /**
-         * 格言取得ボタン: クリックイベントハンドラ
-         */
-
-        // 格言リスト取得
-        if(!adage_list.length) {
-            adage_list = getAdage();
-        }
-
-        let adage = adage_list[index_number];
-        if(adage_list.length > index_number) {
-            showAdage(adage);
-            setTimeout(fixTwitterShareButton, 1, adage.title);
-        }
-    });
-
     function getLikesIconId(index) {
         /**
          * いいねボタン: クリックイベントハンドラ
@@ -157,4 +124,35 @@ $(window).load(function(){
             likesIcon.firstChild.className = 'far fa-heart LikesIcon-fa-heart';
         },1000);
     }
+
+    const Demo = {
+        data() {
+            return {
+                adages: []
+            }
+        },
+        methods: {
+            addAdage() {
+                console.log('TEST IS OK')
+                // 格言リスト取得
+                if(!adage_list.length) {
+                    adage_list = getAdage();
+                }
+        
+                let adage = adage_list[index_number];
+                if(adage_list.length > index_number) {
+                    
+                    const item = {
+                        adageId: adage.adageId,
+                        title: adage.title,
+                        likePoints: adage.likePoints
+                    };
+                    this.adages.push(item);
+                    setTimeout(fixTwitterShareButton, 1, adage.title);
+                }
+            }
+        }
+    }
+    
+    Vue.createApp(Demo).mount('#adageContainer')
 })

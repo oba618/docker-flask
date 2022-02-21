@@ -8,27 +8,30 @@
         </p>
         {% raw %}
         <div id="adageContainer">
-            <div v-for="(adage, index) in adages">
-            <div v-bind:id="'adageId' + index" hidden>{{ adage.adageId }}</div>
-            <h2 class="cover-adage">
-                    {{ adage.title }}
-                </h2>
-                <div class="d-flex justify-content-center pb-3">
-                    <div v-bind:id="'LikesIcon' + index" v-on:click="increasePoints(index)">
-                        <i class="far fa-heart LikesIcon-fa-heart"></i>
+            <transition-group name="list" tag="div">
+                <div v-for="(adage, index) in adages" :key="adage.adageId" class="list-item">
+                    <div v-bind:id="'adageId' + index" hidden>{{ adage.adageId }}</div>
+                    <h2 class="cover-adage">
+                        {{ adage.title }}
+                    </h2>
+                    <div class="d-flex justify-content-center pb-3">
+                        <div v-bind:id="'LikesIcon' + index" v-on:click="increasePoints(index)">
+                            <i class="far fa-heart LikesIcon-fa-heart"></i>
+                        </div>
+                        <div v-bind:id="'likePoints' + index" class="px-3">
+                            {{ adage.likePoints }}
+                        </div>
+                        <div v-bind:id="'twitterShareButton' + index">
+                            <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-text='"One for all All for one"' data-size="large" data-hashtags="格言共有" data-show-count="false">Tweet</a>
+                        </div>
                     </div>
-                    <div v-bind:id="'likePoints' + index" class="px-3">
-                        {{ adage.likePoints }}
-                    </div>
-                    <div v-bind:id="'twitterShareButton' + index">
-                        <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-text='"One for all All for one"' data-size="large" data-hashtags="格言共有" data-show-count="false">Tweet</a>
-                    </div>
-            </div>
+                </div>
+            </transition-group>
+            <p id="getButton" class="">
+                <button @click="addAdage" class="btn btn-lg btn-secondary">タップしてください！</button>
+            </p>
         </div>
         {% endraw %}
-        <p id="getButton" class="">
-            <a href="#" id="getAdageButton" class="btn btn-lg btn-secondary">タップしてください！</a>
-        </p>
     </main>
 
 {% endblock %}
