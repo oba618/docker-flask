@@ -4,25 +4,8 @@ import { Const } from "./common/const.js";
 $(window).load(function(){
     "use strict";
 
-    const getAdageButton = document.getElementById("getAdageButton");
-    const likePoints = document.getElementById("likePoints")
-    
     let adage_list = [];
     let index_number = 0;
-
-    function showAdage(adage) {
-        /**
-         * 格言を結果に追加
-         */
-
-        const item = {
-            adageId: adage.adageId,
-            title: adage.title,
-            likePoints: adage.likePoints
-        }
-
-        vmAdageContainer.adages.push(item)
-    }
 
     function getAdage() {
         /**
@@ -43,7 +26,7 @@ $(window).load(function(){
         })
         // 失敗
         .fail(function (jqXHR, textStatus, errorThrown) {
-            showAdage("error=" + jqXHR.statusText
+            alert("error=" + jqXHR.statusText
                         + ", status=" + jqXHR.status);
         });
 
@@ -55,7 +38,7 @@ $(window).load(function(){
          * ツイートシェアボタンを修正
          */
         const twitterShareButton = document.getElementById('twitterShareButton' + index_number);
-        console.log(twitterShareButton);
+
         // ボタン削除
         if(twitterShareButton.lastChild){
             twitterShareButton.removeChild(twitterShareButton.lastChild);
@@ -101,58 +84,41 @@ $(window).load(function(){
         });
     }
 
-    function increaseLikePoints(suffix) {
-        /**
-         * いいねポイントを増やす
-         */
-        const likePoints = document.getElementsByName("likePoints" + suffix);
-        let points = parseInt(likePoints.textContent, 10);
-        points++;
-        likePoints.innerText = points;
-    }
-
-    function getLikesIconId(index) {
-        /**
-         * いいねボタン: クリックイベントハンドラ
-         */
-        const adageId = document.getElementById('adageId' + index).textContent
-        updateLikePoints(adageId)
-        
-        const likesIcon = document.getElementById("LikesIcon" + index);
-        likesIcon.firstChild.className = 'fas fa-heart LikesIcon-fa-heart heart';
-        setTimeout(function() {
-            likesIcon.firstChild.className = 'far fa-heart LikesIcon-fa-heart';
-        },1000);
-    }
-
-    const Demo = {
+    Vue.createApp({
         data() {
             return {
+                adage_list: getAdage(),
                 adages: []
             }
         },
         methods: {
             addAdage() {
-                console.log('TEST IS OK')
-                // 格言リスト取得
-                if(!adage_list.length) {
-                    adage_list = getAdage();
-                }
-        
-                let adage = adage_list[index_number];
-                if(adage_list.length > index_number) {
-                    
-                    const item = {
-                        adageId: adage.adageId,
-                        title: adage.title,
-                        likePoints: adage.likePoints
-                    };
-                    this.adages.push(item);
+                let adage = this.adage_list[index_number];
+
+                if(this.adage_list.length > index_number) {
+
+                    this.adages.push(
+                        {
+                            adageId: adage.adageId,
+                            title: adage.title,
+                            likePoints: adage.likePoints
+                        }
+                    );
                     setTimeout(fixTwitterShareButton, 1, adage.title);
                 }
+            },
+            increasePoints(adage, index) {
+                const adageId = document.getElementById('adageId' + index).textContent
+                updateLikePoints(adageId)
+                
+                const likesIcon = document.getElementById("LikesIcon" + index);
+                likesIcon.firstChild.className = 'fas fa-heart LikesIcon-fa-heart heart';
+                setTimeout(function() {
+                    likesIcon.firstChild.className = 'far fa-heart LikesIcon-fa-heart';
+                },1000);
+
+                adage.likePoints++;
             }
         }
-    }
-    
-    Vue.createApp(Demo).mount('#adageContainer')
+    }).mount('#adageContainer')
 })
