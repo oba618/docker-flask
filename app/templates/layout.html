@@ -24,8 +24,8 @@
             <nav class="nav nav-masthead justify-content-center">
                 <a id="navGet" class="nav-link" href="/">トップ</a>
                 <a id="navPost" class="nav-link" href="/adage/post">共有する</a>
-                {% if session['idToken'] %}
-                <a id="navSession" class="nav-link" href="/user/setting">設定</a>
+                {% if session['idToken'] and session['userName'] %}
+                <a id="navSession" class="nav-link" href="/user/setting">{{ session['userName'] }}</a>
                 {% else %}
                 <a id="navSession" class="nav-link" href="/user/login">ログイン</a>
                 {% endif %}

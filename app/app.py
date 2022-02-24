@@ -117,9 +117,10 @@ def user_reset_password():
     )
 
 
-@app.route('/process/login')
-def process_login():
+@app.route('/process/login/<string:user_name>')
+def process_login(user_name: str):
     session['idToken'] = 'true'
+    session['userName'] = user_name
     return redirect('/adage/post')
 
 

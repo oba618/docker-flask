@@ -117,6 +117,10 @@ body > .body-background {
   }
 }
 
+.btn-dark {
+  color: #fff;
+  border-color: white;
+}
 
 
 /*
@@ -124,7 +128,7 @@ body > .body-background {
  */
 .cover {
   margin: auto;
-  padding: 0 1.5rem;
+  /* padding: 0 1.5rem; */
 }
 @media (max-width: 424px) {
   .cover {

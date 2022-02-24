@@ -101,7 +101,8 @@ $(window).load(function(){
                         {
                             adageId: adage.adageId,
                             title: adage.title,
-                            likePoints: adage.likePoints
+                            likePoints: adage.likePoints,
+                            episode: adage.episode
                         }
                     );
                     setTimeout(fixTwitterShareButton, 1, adage.title);

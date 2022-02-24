@@ -4,6 +4,7 @@ $(window).load(function(){
     "use strict";
 
     const form = document.getElementById("userLoginForm");
+    const loginAlert = document.getElementById("loginAlert");
 
     form.addEventListener("submit", function (event) {
         event.preventDefault();
@@ -14,10 +15,21 @@ $(window).load(function(){
 
         // 成功の場合
         XHR.addEventListener("load", function(event) {
-            sessionStorage.setItem('idToken', XHR.response.idToken);
-            sessionStorage.setItem('accessToken', XHR.response.accessToken);
-            sessionStorage.setItem('nowLogin', 'true');
-            location.href = '/process/login';
+            if(XHR.response.errorCode >= 400) {
+                loginAlert.innerHTML = [
+                    XHR.response.errorCode,
+                    XHR.response.phrase,
+                    XHR.response.message
+                ].join("<br>")
+                $("#loginAlert").fadeIn();
+            }
+            else {
+                sessionStorage.setItem('idToken', XHR.response.idToken);
+                sessionStorage.setItem('accessToken', XHR.response.accessToken);
+                sessionStorage.setItem('userName', XHR.response.userName);
+                sessionStorage.setItem('nowLogin', 'true');
+                location.href = '/process/login/' + XHR.response.userName;
+            }
         });
     
         // 失敗の場合
