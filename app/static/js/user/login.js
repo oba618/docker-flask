@@ -5,8 +5,12 @@ $(window).load(function(){
 
     const form = document.getElementById("userLoginForm");
     const loginAlert = document.getElementById("loginAlert");
+    const returnPath = document.getElementById("returnPath")
 
     form.addEventListener("submit", function (event) {
+        /**
+         * 格言送信
+         */
         event.preventDefault();
 
         const XHR = new XMLHttpRequest();
@@ -15,6 +19,8 @@ $(window).load(function(){
 
         // 成功の場合
         XHR.addEventListener("load", function(event) {
+
+            // 異常レスポンスの場合
             if(XHR.response.errorCode >= 400) {
                 loginAlert.innerHTML = [
                     XHR.response.errorCode,
@@ -23,12 +29,24 @@ $(window).load(function(){
                 ].join("<br>")
                 $("#loginAlert").fadeIn();
             }
+
+            // 正常レスポンスの場合
             else {
                 sessionStorage.setItem('idToken', XHR.response.idToken);
                 sessionStorage.setItem('accessToken', XHR.response.accessToken);
                 sessionStorage.setItem('userName', XHR.response.userName);
-                sessionStorage.setItem('nowLogin', 'true');
-                location.href = '/process/login/' + XHR.response.userName;
+                sessionStorage.setItem('alertString', 'login');
+
+                if(returnPath) {
+                    location.href = [
+                        "/process/login",
+                        XHR.response.userName,
+                        returnPath.innerText,
+                    ].join("/");
+                }
+                else {
+                    location.href = '/process/login/' + XHR.response.userName;
+                }
             }
         });
     

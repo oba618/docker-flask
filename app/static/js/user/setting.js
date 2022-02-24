@@ -5,7 +5,7 @@ $(window).load(function(){
 
         sessionStorage.removeItem("idToken");
         sessionStorage.removeItem("accessToken");
-        sessionStorage.setItem("nowLogout", "true");
+        sessionStorage.setItem('alertString', 'logout');
 
         location.href = "/process/logout";
     });

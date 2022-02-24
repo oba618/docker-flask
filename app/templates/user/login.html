@@ -18,6 +18,9 @@
                 <label class="form-label" for="password">パスワード</label>
                 <input class="form-control" id="inputPassword" type="password" name="password">
             </div>
+            {% if input_values.return_path %}
+            <div id="returnPath" hidden>{{ input_values.return_path }}</div>
+            {% endif %}
             <input class="" type="submit" value="送信">
         </form>
         <p><a href="/user/singup">新規登録はこちら</a></p>

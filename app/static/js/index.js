@@ -4,6 +4,8 @@ import { Const } from "./common/const.js";
 $(window).load(function(){
     "use strict";
 
+    $("#adageContainer").fadeIn();
+
     let adage_list = [];
     let index_number = 0;
 
@@ -119,6 +121,13 @@ $(window).load(function(){
                 },1000);
 
                 adage.likePoints++;
+            },
+            addEpisode(adageId, adageTitle) {
+                location.href = [
+                    "adage/episode/post",
+                    adageId,
+                    adageTitle,
+                ].join("/");
             }
         }
     }).mount('#adageContainer')

@@ -1,6 +1,28 @@
 $(window).load(function(){
     "use strict";
 
+    const alertHeader = document.getElementById("header-alert");
+    const alertString = sessionStorage.getItem("alertString");
+
+    function hiddenAlert(id) {
+        $(id).fadeOut();
+    }
+
+    function showHeaderAlert() {
+        if(alertString == "logout") {
+            alertHeader.innerText = "ログアウトしました";
+            alertHeader.className = "alert alert-success fixed-top"
+        }
+        else if(alertString == "login") {
+            alertHeader.innerText = "ログインしました";
+            alertHeader.className = "alert alert-success fixed-top"
+        }
+
+        $("#header-alert").fadeIn();
+        setTimeout(hiddenAlert, 15*1000, "#header-alert");
+        sessionStorage.removeItem("alertString");
+    }
+
     function activeHeaderNav() {
         /**
          * ヘッダーナビをパスに合わせてアクティブ化
@@ -25,4 +47,8 @@ $(window).load(function(){
     }
 
     activeHeaderNav()
+
+    if(alertString) {
+        showHeaderAlert();
+    }
 });

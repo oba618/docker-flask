@@ -33,6 +33,19 @@ def adage_post():
     )
 
 
+@app.route("/adage/episode/post/<string:adage_id>/<string:adage_title>")
+def adage_episode_post(adage_id: str, adage_title: str):
+    return render_template(
+        'episode/post.html',
+        input_values={
+            'id': adage_id,
+            'title': adage_title,
+            'js_path': 'episode',
+            'js_file_name': 'post.js',
+        },
+    )
+
+
 @app.route('/user/singup')
 def user_singup():
     return render_template(
@@ -58,13 +71,15 @@ def user_confirm():
 
 
 @app.route('/user/login')
-def user_login():
+@app.route('/user/login/<path:path>')
+def user_login(path: str=None):
     return render_template(
         'user/login.html',
         input_values={
             'title': 'ログイン',
             'js_path': 'user',
             'js_file_name': 'login.js',
+            'return_path': path,
         },
     )
 
@@ -118,10 +133,15 @@ def user_reset_password():
 
 
 @app.route('/process/login/<string:user_name>')
-def process_login(user_name: str):
+@app.route('/process/login/<string:user_name>/<path:return_path>')
+def process_login(user_name: str, return_path: str=None):
     session['idToken'] = 'true'
     session['userName'] = user_name
-    return redirect('/adage/post')
+
+    if return_path:
+        return redirect('/' + return_path)
+    else:
+        return redirect('/adage/post')
 
 
 @app.route('/process/logout')

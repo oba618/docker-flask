@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block content %}
+    
+    <main role="main" class="inner cover">
+        <h1 class="cover-heading">{{ input_values.title }}</h1>
+        <p class="lead pb-5">
+            エピソード投稿フォームです。
+        </p>
+        <div class="alert alert-danger" role="alert" id="loginAlert" style="display: none">
+            格言を共有するには、<a href="/user/login/adage/episode/post/{{ input_values.id }}/{{ input_values.title }}" class="alert-link">ログイン</a>が必要です。
+        </div>
+        <form id="episodePostForm" class="pb-5">
+            <div class="form-group">
+                <label class="form-label" for="episode">エピソード</label>
+                <textarea rows="10" id="inputTextEpisode" class="form-control" name="episode"></textarea>
+            </div>
+            <input id="postEpisodeButton" class="" type="submit" value="投稿">
+        </form>
+    </main>
+
+    {% endblock %}
