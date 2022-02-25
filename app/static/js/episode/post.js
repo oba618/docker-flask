@@ -8,10 +8,6 @@ $(window).load(function(){
     const inputTextEpisode = document.getElementById("inputTextEpisode");
     const postEpisodeButton = document.getElementById("postEpisodeButton");
 
-    function hiddenAlert(id) {
-        $(id).fadeOut();
-    }
-
     form.addEventListener("submit", function (event) {
         event.preventDefault();
 
@@ -21,10 +17,19 @@ $(window).load(function(){
 
         // 成功の場合
         XHR.addEventListener("load", function(event) {
-            $("#thanksAlert").fadeIn();
-            inputTextTitle.value = "";
-            inputTextEpisode.value = "";
-            setTimeout(hiddenAlert, 15*1000, "#thanksAlert");
+            if(XHR.response.errorCode >= 400) {
+                loginAlert.innerHTML = [
+                    XHR.response.errorCode,
+                    XHR.response.phrase,
+                    XHR.response.message
+                ].join("<br>")
+                $("#loginAlert").fadeIn();
+            }
+            else {
+                $("#thanksAlert").fadeIn();
+                inputTextEpisode.value = "";
+                setTimeout(hiddenAlert, 15*1000, "#thanksAlert");
+            }
         });
     
         // 失敗の場合
@@ -34,7 +39,7 @@ $(window).load(function(){
 
         // リクエスト
         XHR.responseType = "text";
-        XHR.open("POST", Const.BASE_PATH + "/adage");
+        XHR.open("POST", Const.BASE_PATH + "/episode");
         XHR.setRequestHeader( 'Content-Type', 'application/json' );
         XHR.setRequestHeader( 'Authorization', idToken );
         XHR.send(JSON.stringify(formDataObj));
@@ -46,12 +51,5 @@ $(window).load(function(){
         $("#loginAlert").fadeIn();
         inputTextEpisode.disabled = true;
         postEpisodeButton.disabled = true;
-    }
-
-    // ログインした場合
-    if(sessionStorage.getItem("nowLogin")) {
-        sessionStorage.removeItem("nowLogin");
-        $("#nowLoginAlert").fadeIn()
-        setTimeout(hiddenAlert, 15*1000, "#nowLoginAlert")
     }
 });

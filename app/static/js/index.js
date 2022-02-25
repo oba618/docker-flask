@@ -4,6 +4,7 @@ import { Const } from "./common/const.js";
 $(window).load(function(){
     "use strict";
 
+    $("#loadingSpinner").hide();
     $("#adageContainer").fadeIn();
 
     let adage_list = [];

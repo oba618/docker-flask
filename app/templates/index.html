@@ -7,6 +7,7 @@
             簡潔であり美しい言葉には魂が宿ります。このページでは、それを口ずさみ、自分の座右の銘とし、さらには共有することができます。あなたの訪問に感謝します。
         </p>
         {% raw %}
+        <div id="loadingSpinner" class="spinner-border text-light" role="status" style="display: inline-block;"></div>
         <div id="adageContainer" style="display: none">
             <transition-group name="list" tag="div">
                 <div v-for="(adage, index) in adages" :key="adage.adageId" class="list-item pb-5">
@@ -27,7 +28,7 @@
                     </div>
                     <div class="adage-episode-container">
                         <div v-for="item in adage.episode" class="episode-block">
-                            <p><a :href="'/get/user/' + item.userId ">{{ item.userName }}</a> : {{ item.episode }}</p>
+                            <p>{{ item.userName }} : {{ item.episode }}</p>
                         </div>
                         <button @click="addEpisode(adage.adageId, adage.title)" class="btn btn-dark">エピソードを投稿する</button>
                     </div>
