@@ -14,12 +14,12 @@
         </div>
         <form id="adagePostForm" class="pb-5">
             <div class="form-group">
-                <label class="form-label" for="title">格言: 必須</label>
-                <input class="form-control" id="inputTextTitle" type="text" name="title">
+                <label class="form-label" for="title">格言: 必須(200文字以下)</label>
+                <input class="form-control" id="inputTextTitle" type="text" name="title" required maxlength="200">
             </div>
             <div class="form-group">
-                <label class="form-label" for="episode">エピソード: 任意</label>
-                <textarea rows="10" class="form-control" id="inputTextEpisode" name="episode"></textarea>
+                <label class="form-label" for="episode">エピソード: 任意(5,000文字以下)</label>
+                <textarea rows="10" class="form-control" id="inputTextEpisode" name="episode" maxlength="5000"></textarea>
             </div>
             <input id="postAdageButton" type="submit" value="送信">
         </form>

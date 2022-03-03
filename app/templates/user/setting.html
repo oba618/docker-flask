@@ -2,11 +2,21 @@
 {% block content %}
     
     <main role="main" class="inner cover">
-        <h1 class="cover-heading">ユーザー設定</h1>
-        <ul>
-            <li><button id="logout">ログアウト</button></li>
-            <li><a href="/user/delete">ユーザ削除</a></li>
-        </ul>
+        <h1 class="cover-heading">プロフィール変更</h1>
+        <div id="loadingSpinner" class="spinner-border text-light" role="status" style="display: inline-block;"></div>
+        <div id="profileContainer" style="display: none">
+            <form id="changeUserNameForm" class="pb-5">
+                <div class="form-group">
+                    <label class="form-label" for="userName">ユーザ名: 20文字以下</label>
+                    <input class="form-control" id="userName" type="text" name="userName" maxlength="20" required>
+                </div>
+                <input class="" type="submit" value="変更する">
+            </form>
+        </div>
+        <div>
+            <button id="logout" class="mb-2">ログアウト</button>
+            <p><a href="/user/delete">ユーザ削除</a></p>
+        </div>
     </main>
 
     {% endblock %}

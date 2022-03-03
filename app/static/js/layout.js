@@ -11,15 +11,18 @@ $(window).load(function(){
     function showHeaderAlert() {
         if(alertString == "logout") {
             alertHeader.innerText = "ログアウトしました";
-            alertHeader.className = "alert alert-success fixed-top"
+            alertHeader.className = "alert alert-success fixed-top";
         }
         else if(alertString == "login") {
             alertHeader.innerText = "ログインしました";
-            alertHeader.className = "alert alert-success fixed-top"
+            alertHeader.className = "alert alert-success fixed-top";
         }
-
+        else if(alertString == "userPut") {
+            alertHeader.innerText = "更新しました";
+            alertHeader.className = "alert alert-success fixed-top";
+        }
         $("#header-alert").fadeIn();
-        setTimeout(hiddenAlert, 15*1000, "#header-alert");
+        setTimeout(hiddenAlert, 5*1000, "#header-alert");
         sessionStorage.removeItem("alertString");
     }
 

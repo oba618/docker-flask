@@ -150,5 +150,12 @@ def process_logout():
     return redirect('/')
 
 
+@app.route('/process/user/name/<string:user_name>')
+def process_user_name(user_name: str):
+    session['userName'] = user_name
+
+    return redirect('/user/setting')
+
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=port)

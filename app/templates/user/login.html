@@ -12,11 +12,11 @@
         <form id="userLoginForm" class="pb-5">
             <div class="form-group">
                 <label class="form-label" for="loginId">メールアドレス</label>
-                <input class="form-control" id="inputLoginId" type="email" name="loginId">
+                <input class="form-control" id="inputLoginId" type="email" name="loginId" required>
             </div>
             <div class="form-group">
                 <label class="form-label" for="password">パスワード</label>
-                <input class="form-control" id="inputPassword" type="password" name="password">
+                <input class="form-control" id="inputPassword" type="password" name="password" required>
             </div>
             {% if input_values.return_path %}
             <div id="returnPath" hidden>{{ input_values.return_path }}</div>
