@@ -24,11 +24,22 @@ $(window).load(function(){
         
         // 成功の場合
         XHR.addEventListener("load", function(event) {
-            alert("ユーザを削除しました。ご利用頂きありがとうございました。");
-            sessionStorage.removeItem('idToken');
-            sessionStorage.removeItem('accessToken');
-            if(confirm) {
-                window.location.href = '/';
+
+            // 異常レスポンスの場合
+            if(XHR.response.errorCode >= 400) {
+                loginAlert.innerHTML = [
+                    XHR.response.errorCode,
+                    XHR.response.phrase,
+                    XHR.response.message
+                ].join("<br>")
+                $("#loginAlert").fadeIn();
+            }
+
+            // 正常レスポンスの場合
+            else {
+                sessionStorage.clear();
+                sessionStorage.setItem('alertString', 'userDelete');
+                location.href = '/user/delete/success';
             }
         });
         
@@ -39,7 +50,7 @@ $(window).load(function(){
         
         // リクエスト
         formDataObj.accessToken = accessToken;
-        XHR.responseType = "text";
+        XHR.responseType = "json";
         XHR.open("DELETE", Const.BASE_PATH + "/user");
         XHR.setRequestHeader( 'Content-Type', 'application/json' );
         XHR.setRequestHeader( 'Authorization', idToken );

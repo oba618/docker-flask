@@ -2,8 +2,15 @@ import { Const } from "../common/const.js";
 
 $(window).load(function(){
     "use strict";
+    
+    const idToken = sessionStorage.getItem("idToken");
+    const form = document.getElementById("episodePostForm");
+    const inputTextEpisode = document.getElementById("inputTextEpisode");
+    const postEpisodeButton = document.getElementById("postEpisodeButton");
 
-    const form = document.getElementById("userConfirmForm");
+    function hiddenAlert(id) {
+        $(id).fadeOut();
+    }
 
     form.addEventListener("submit", function (event) {
         event.preventDefault();
@@ -14,8 +21,6 @@ $(window).load(function(){
 
         // 成功の場合
         XHR.addEventListener("load", function(event) {
-
-            // 異常レスポンスの場合
             if(XHR.response.errorCode >= 400) {
                 loginAlert.innerHTML = [
                     XHR.response.errorCode,
@@ -24,10 +29,10 @@ $(window).load(function(){
                 ].join("<br>")
                 $("#loginAlert").fadeIn();
             }
-
             else {
-                sessionStorage.setItem('alertString', 'userConfirmed');
-                window.location.href = '/user/login';
+                $("#thanksAlert").fadeIn();
+                inputTextEpisode.value = "";
+                setTimeout(hiddenAlert, 15*1000, "#thanksAlert");
             }
         });
     
@@ -38,8 +43,17 @@ $(window).load(function(){
 
         // リクエスト
         XHR.responseType = "text";
-        XHR.open("POST", Const.BASE_PATH + "/user/confirm");
+        XHR.open("POST", Const.BASE_PATH + "/episode");
         XHR.setRequestHeader( 'Content-Type', 'application/json' );
+        XHR.setRequestHeader( 'Authorization', idToken );
         XHR.send(JSON.stringify(formDataObj));
     });
+    console.log(idToken);
+
+    // idTokenが空の場合
+    if(idToken === null) {
+        $("#loginAlert").fadeIn();
+        inputTextEpisode.disabled = true;
+        postEpisodeButton.disabled = true;
+    }
 });

@@ -14,15 +14,26 @@ $(window).load(function(){
 
         // 成功の場合
         XHR.addEventListener("load", function(event) {
-            alert("登録されたメールアドレスに認証コードを送信しました。");
-            if(confirm) {
+
+            // 異常レスポンスの場合
+            if(XHR.response.errorCode >= 400) {
+                loginAlert.innerHTML = [
+                    XHR.response.errorCode,
+                    XHR.response.phrase,
+                    XHR.response.message
+                ].join("<br>")
+                $("#loginAlert").fadeIn();
+            }
+
+            else {
+                sessionStorage.setItem('alertString', 'sendConfirmCode');
                 window.location.href = '/user/confirm';
             }
         });
     
         // 失敗の場合
         XHR.addEventListener("error", function(event) {
-            alert("登録に失敗しました。");
+            alert("エラーが発生しました");
         });
 
         // リクエスト

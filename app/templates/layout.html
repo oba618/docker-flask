@@ -24,19 +24,22 @@
             <nav class="nav nav-masthead justify-content-center">
                 <a id="navGet" class="nav-link" href="/">トップ</a>
                 <a id="navPost" class="nav-link" href="/adage/post">共有する</a>
-                {% if session['idToken'] %}
-                <a id="navSession" class="nav-link" href="/user/setting">設定</a>
+                {% if session['idToken'] and session['userName'] %}
+                <a id="navSession" class="nav-link" href="/user/setting">{{ session['userName'] }}</a>
                 {% else %}
                 <a id="navSession" class="nav-link" href="/user/login">ログイン</a>
                 {% endif %}
             </nav>
         </div>
     </header>
+
+    <!-- alert -->
+    <div id="header-alert" class="alert alert-danger fixed-top" role="alert" style="display: none"></div>
+
     {% block content %}
-
     <!-- content -->
-
     {% endblock %}
+
     <footer class="mastfoot mt-auto">
         <div class="inner pt-5">
             <p>One for all All for one.</p>
@@ -48,6 +51,7 @@
 
 <script type="text/javascript" async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.3.js"></script>
+<script type="text/javascript" src="https://unpkg.com/vue@3.2.31"></script>
 <script type="module" src="{{ url_for('static', filename='js/layout.js') }}"></script>
 {% if input_values.js_path %}
 <script type="module" src="

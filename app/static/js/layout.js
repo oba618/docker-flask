@@ -1,6 +1,44 @@
 $(window).load(function(){
     "use strict";
 
+    const alertHeader = document.getElementById("header-alert");
+    const alertString = sessionStorage.getItem("alertString");
+
+    function hiddenAlert(id) {
+        $(id).fadeOut();
+    }
+
+    function showHeaderAlert() {
+        if(alertString == "logout") {
+            alertHeader.innerText = "ログアウトしました";
+            alertHeader.className = "alert alert-success fixed-top";
+        }
+        else if(alertString == "login") {
+            alertHeader.innerText = "ログインしました";
+            alertHeader.className = "alert alert-success fixed-top";
+        }
+        else if(alertString == "userPut") {
+            alertHeader.innerText = "ユーザを更新しました";
+            alertHeader.className = "alert alert-success fixed-top";
+        }
+        else if(alertString == "userDelete") {
+            alertHeader.innerText = "ユーザを削除しました";
+            alertHeader.className = "alert alert-success fixed-top";
+        }
+        else if(alertString == "sendConfirmCode") {
+            alertHeader.innerText = "メールアドレスに認証コードを送信しました。";
+            alertHeader.className = "alert alert-success fixed-top";
+        }
+        else if(alertString == "userConfirmed") {
+            alertHeader.innerText = "お疲れ様でした。ユーザ登録は完了しました。引き続き当サービスを宜しくお願い致します。";
+            alertHeader.className = "alert alert-success fixed-top";
+        }
+        
+        $("#header-alert").fadeIn();
+        setTimeout(hiddenAlert, 5*1000, "#header-alert");
+        sessionStorage.removeItem("alertString");
+    }
+
     function activeHeaderNav() {
         /**
          * ヘッダーナビをパスに合わせてアクティブ化
@@ -25,4 +63,8 @@ $(window).load(function(){
     }
 
     activeHeaderNav()
+
+    if(alertString) {
+        showHeaderAlert();
+    }
 });

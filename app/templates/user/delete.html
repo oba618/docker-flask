@@ -4,12 +4,16 @@
     <main role="main" class="inner cover">
         <h1 class="cover-heading">ユーザ削除</h1>
         <p class="lead pb-5">
+            一度削除したユーザーの情報は復元できません<br>
             ユーザを削除する場合は、メールアドレスを入力してください。
         </p>
+        <div class="alert alert-danger" role="alert" id="loginAlert" style="display: none">
+            Error
+        </div>
         <form id="userDeleteForm" class="pb-5">
             <div class="form-group">
                 <label class="form-label" for="loginId">メールアドレス</label>
-                <input class="form-control" id="inputLoginId" type="email" name="loginId">
+                <input class="form-control" id="inputLoginId" type="email" name="loginId" required>
             </div>
             <input type="submit" value="送信">
         </form>
