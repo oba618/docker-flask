@@ -6,14 +6,17 @@
         <p class="lead pb-5">
             このフォームではユーザーを新規登録することができます。
         </p>
+        <div class="alert alert-danger" role="alert" id="loginAlert" style="display: none">
+            Error
+        </div>
         <form id="userPostForm" class="pb-5">
             <div class="form-group">
                 <label class="form-label" for="loginId">メールアドレス</label>
-                <input class="form-control" id="inputLoginId" type="email" name="loginId">
+                <input class="form-control" id="inputLoginId" type="email" name="loginId" required>
             </div>
             <div class="form-group">
                 <label class="form-label" for="password">パスワード</label>
-                <input class="form-control" id="inputPassword" type="password" name="password">
+                <input class="form-control" id="inputPassword" type="password" name="password" required>
             </div>
             <input class="" type="submit" value="送信">
         </form>

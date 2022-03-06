@@ -1,28 +1,20 @@
 import { Const } from "./common/const.js";
 
+
 $(window).load(function(){
     "use strict";
-    
-    let first_view = document.getElementById("firstView");
+
+    $("#loadingSpinner").hide();
+    $("#adageContainer").fadeIn();
+
     let adage_list = [];
     let index_number = 0;
-
-    function showAdage(adage) {
-        /**
-         * 格言を結果に追加
-         */
-        $("#adageId").text(adage.adageId);
-        $("#adageTitle").text('"' + adage.title + '"');
-        $("#likePoints").text(adage.likePoints);
-    }
 
     function getAdage() {
         /**
          * 格言を取得
          * return {any} 格言
          */
-        let adage;
-
         $.ajax({
             type: "GET",
             url: [Const.BASE_PATH, "adage"].join("/"),
@@ -37,20 +29,21 @@ $(window).load(function(){
         })
         // 失敗
         .fail(function (jqXHR, textStatus, errorThrown) {
-            showAdage("error=" + jqXHR.statusText
+            alert("error=" + jqXHR.statusText
                         + ", status=" + jqXHR.status);
         });
 
         return adage_list;
     }
 
-    function fixTwitterShareButton(twitterShareButton, adageTitle) {
+    const fixTwitterShareButton = function fixTwitterShareButton(adageTitle) {
         /**
          * ツイートシェアボタンを修正
          */
+        const twitterShareButton = document.getElementById('twitterShareButton' + index_number);
 
         // ボタン削除
-        while(twitterShareButton.lastChild){
+        if(twitterShareButton.lastChild){
             twitterShareButton.removeChild(twitterShareButton.lastChild);
         }
 
@@ -68,6 +61,8 @@ $(window).load(function(){
         script.setAttribute("src", Const.TWITTER_WIDGETS_URL);
         twitterShareButton.appendChild(a);
         twitterShareButton.appendChild(script);
+
+        index_number++;
     }
 
     function updateLikePoints(adageId) {
@@ -92,55 +87,49 @@ $(window).load(function(){
         });
     }
 
-    function increaseLikePoints() {
-        /**
-         * いいねポイントを増やす
-         */
-        var likePoints = parseInt(
-            document.getElementById('likePoints').textContent, 10);
-        likePoints++;
-        $("#likePoints").text(likePoints);
-    }
+    Vue.createApp({
+        data() {
+            return {
+                adage_list: getAdage(),
+                adages: []
+            }
+        },
+        methods: {
+            addAdage() {
+                let adage = this.adage_list[index_number];
 
-    $("#getAdageButton").click(function (e) {
-        /**
-         * 格言取得ボタン: クリックイベントハンドラ
-         */
-        if(first_view.hidden == true) {
-            first_view.hidden = false;
+                if(this.adage_list.length > index_number) {
+
+                    this.adages.push(
+                        {
+                            adageId: adage.adageId,
+                            title: adage.title,
+                            likePoints: adage.likePoints,
+                            episode: adage.episode
+                        }
+                    );
+                    setTimeout(fixTwitterShareButton, 1, adage.title);
+                }
+            },
+            increasePoints(adage, index) {
+                const adageId = document.getElementById('adageId' + index).textContent
+                updateLikePoints(adageId)
+                
+                const likesIcon = document.getElementById("LikesIcon" + index);
+                likesIcon.firstChild.className = 'fas fa-heart LikesIcon-fa-heart heart';
+                setTimeout(function() {
+                    likesIcon.firstChild.className = 'far fa-heart LikesIcon-fa-heart';
+                },1000);
+
+                adage.likePoints++;
+            },
+            addEpisode(adageId, adageTitle) {
+                location.href = [
+                    "adage/episode/post",
+                    adageId,
+                    adageTitle,
+                ].join("/");
+            }
         }
-
-        $("#adageTitle").text("Now Loading ...");
-
-        // 格言リスト取得
-        if(!adage_list.length) {
-            adage_list = getAdage();
-        }
-
-        let adage = adage_list[index_number];
-        index_number++;
-        if(adage_list.length == index_number) {
-            index_number = 0;
-        }
-
-        showAdage(adage);
-        fixTwitterShareButton(document.getElementById('twitterShareButton'), adage.title);
-    });
-
-    $('.LikesIcon').click(function() {
-        /**
-         * いいねボタン: クリックイベントハンドラ
-         */
-        let $btn = $(this);
-        let adageId = document.getElementById('adageId').textContent
-
-        $btn.children("i").attr('class', 'fas fa-heart LikesIcon-fa-heart heart');
-
-        updateLikePoints(adageId)
-        increaseLikePoints()
-
-        setTimeout(function() {
-            $btn.children("i").attr('class', 'far fa-heart LikesIcon-fa-heart');
-        },1000);
-    })
+    }).mount('#adageContainer')
 })

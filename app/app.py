@@ -33,6 +33,21 @@ def adage_post():
     )
 
 
+@app.route("/adage/episode/post/<adage_id>/<adage_title>")
+@app.route("/adage/episode/post/<adage_id>/<adage_title>/<my_episode>")
+def adage_episode_post(adage_id: str, adage_title: str, my_episode: str=''):
+    return render_template(
+        'episode/post.html',
+        input_values={
+            'id': adage_id,
+            'title': adage_title,
+            'episode': my_episode,
+            'js_path': 'episode',
+            'js_file_name': 'post.js',
+        },
+    )
+
+
 @app.route('/user/singup')
 def user_singup():
     return render_template(
@@ -58,13 +73,15 @@ def user_confirm():
 
 
 @app.route('/user/login')
-def user_login():
+@app.route('/user/login/<path:path>')
+def user_login(path: str=None):
     return render_template(
         'user/login.html',
         input_values={
             'title': 'ログイン',
             'js_path': 'user',
             'js_file_name': 'login.js',
+            'return_path': path,
         },
     )
 
@@ -93,6 +110,17 @@ def user_delete():
     )
 
 
+@app.route('/user/delete/success')
+def user_delete_success():
+    session.clear()
+    return render_template(
+        'user/deleteSuccess.html',
+        input_values={
+            'title': 'ユーザ削除完了',
+        }
+    )
+
+
 @app.route('/user/sendResetPasswordCode')
 def user_send_reset_password_code():
     return render_template(
@@ -117,16 +145,29 @@ def user_reset_password():
     )
 
 
-@app.route('/process/login')
-def process_login():
+@app.route('/process/login/<string:user_name>')
+@app.route('/process/login/<string:user_name>/<path:return_path>')
+def process_login(user_name: str, return_path: str=None):
     session['idToken'] = 'true'
-    return redirect('/adage/post')
+    session['userName'] = user_name
+
+    if return_path:
+        return redirect('/' + return_path)
+    else:
+        return redirect('/adage/post')
 
 
 @app.route('/process/logout')
 def process_logout():
     session.clear()
     return redirect('/')
+
+
+@app.route('/process/user/name/<string:user_name>')
+def process_user_name(user_name: str):
+    session['userName'] = user_name
+
+    return redirect('/user/setting')
 
 
 if __name__ == '__main__':

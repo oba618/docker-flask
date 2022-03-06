@@ -22,10 +22,20 @@ $(window).load(function(){
 
         // 成功の場合
         XHR.addEventListener("load", function(event) {
-            $("#thanksAlert").fadeIn();
-            inputTextTitle.value = "";
-            inputTextEpisode.value = "";
-            setTimeout(hiddenAlert, 15*1000, "#thanksAlert");
+            if(XHR.response.errorCode >= 400) {
+                loginAlert.innerHTML = [
+                    XHR.response.errorCode,
+                    XHR.response.phrase,
+                    XHR.response.message
+                ].join("<br>")
+                $("#loginAlert").fadeIn();
+            }
+            else {
+                $("#thanksAlert").fadeIn();
+                inputTextTitle.value = "";
+                inputTextEpisode.value = "";
+                setTimeout(hiddenAlert, 15*1000, "#thanksAlert");
+            }
         });
     
         // 失敗の場合
@@ -48,12 +58,5 @@ $(window).load(function(){
         inputTextTitle.disabled = true;
         inputTextEpisode.disabled = true;
         postAdageButton.disabled = true;
-    }
-
-    // ログインした場合
-    if(sessionStorage.getItem("nowLogin")) {
-        sessionStorage.removeItem("nowLogin");
-        $("#nowLoginAlert").fadeIn()
-        setTimeout(hiddenAlert, 15*1000, "#nowLoginAlert")
     }
 });
