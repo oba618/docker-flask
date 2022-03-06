@@ -4,6 +4,7 @@ $(window).load(function(){
     "use strict";
     
     const idToken = sessionStorage.getItem("idToken");
+    const userId = sessionStorage.getItem("userId");
     const form = document.getElementById("episodePostForm");
     const inputTextEpisode = document.getElementById("inputTextEpisode");
     const postEpisodeButton = document.getElementById("postEpisodeButton");
@@ -42,10 +43,15 @@ $(window).load(function(){
         });
 
         // リクエスト
-        XHR.responseType = "text";
+        if(idToken) {
+            formDataObj.userId = userId;
+        }
+        else {
+            formDataObj.userId = 'guest';
+        }
+        XHR.responseType = "json";
         XHR.open("POST", Const.BASE_PATH + "/episode");
         XHR.setRequestHeader( 'Content-Type', 'application/json' );
-        XHR.setRequestHeader( 'Authorization', idToken );
         XHR.send(JSON.stringify(formDataObj));
     });
     console.log(idToken);
@@ -53,7 +59,5 @@ $(window).load(function(){
     // idTokenが空の場合
     if(idToken === null) {
         $("#loginAlert").fadeIn();
-        inputTextEpisode.disabled = true;
-        postEpisodeButton.disabled = true;
     }
 });

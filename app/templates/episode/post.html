@@ -11,8 +11,9 @@
             {% endif %}
             この格言にまつわるエピソードを教えてください！
         </p>
-        <div class="alert alert-danger" role="alert" id="loginAlert" style="display: none">
-            エピソードを投稿するには、<a href="/user/login/adage/episode/post/{{ input_values.id }}/{{ input_values.title }}" class="alert-link">ログイン</a>が必要です。
+        <div class="alert alert-warning" role="alert" id="loginAlert" style="display: none">
+            <a href="/user/login" class="alert-link">ログイン</a>していないゲストユーザーの投稿は、<br>
+            ユーザーによる審査を通過した後に登録されます。
         </div>
         <form id="episodePostForm" class="pb-5">
             <input type="text" value="{{ input_values.id }}" name="adageId" hidden>
