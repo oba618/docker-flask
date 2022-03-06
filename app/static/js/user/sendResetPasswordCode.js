@@ -14,8 +14,19 @@ $(window).load(function(){
 
         // 成功の場合
         XHR.addEventListener("load", function(event) {
-            alert("メールアドレスに再設定コードを送信しました。");
-            if(confirm) {
+
+            // 異常レスポンスの場合
+            if(XHR.response.errorCode >= 400) {
+                loginAlert.innerHTML = [
+                    XHR.response.errorCode,
+                    XHR.response.phrase,
+                    XHR.response.message
+                ].join("<br>")
+                $("#loginAlert").fadeIn();
+            }
+
+            else {
+                sessionStorage.setItem('alertString', 'sendConfirmCode');
                 window.location.href = '/user/resetPassword';
             }
         });
@@ -26,7 +37,7 @@ $(window).load(function(){
         });
 
         // リクエスト
-        XHR.responseType = "text";
+        XHR.responseType = "json";
         XHR.open("POST", Const.BASE_PATH + "/user/sendResetPasswordCode");
         XHR.setRequestHeader( 'Content-Type', 'application/json' );
         XHR.send(JSON.stringify(formDataObj));

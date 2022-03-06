@@ -110,6 +110,17 @@ def user_delete():
     )
 
 
+@app.route('/user/delete/success')
+def user_delete_success():
+    session.clear()
+    return render_template(
+        'user/deleteSuccess.html',
+        input_values={
+            'title': 'ユーザ削除完了',
+        }
+    )
+
+
 @app.route('/user/sendResetPasswordCode')
 def user_send_reset_password_code():
     return render_template(

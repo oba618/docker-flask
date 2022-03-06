@@ -18,9 +18,22 @@ $(window).load(function(){
             alertHeader.className = "alert alert-success fixed-top";
         }
         else if(alertString == "userPut") {
-            alertHeader.innerText = "更新しました";
+            alertHeader.innerText = "ユーザを更新しました";
             alertHeader.className = "alert alert-success fixed-top";
         }
+        else if(alertString == "userDelete") {
+            alertHeader.innerText = "ユーザを削除しました";
+            alertHeader.className = "alert alert-success fixed-top";
+        }
+        else if(alertString == "sendConfirmCode") {
+            alertHeader.innerText = "メールアドレスに認証コードを送信しました。";
+            alertHeader.className = "alert alert-success fixed-top";
+        }
+        else if(alertString == "userConfirmed") {
+            alertHeader.innerText = "お疲れ様でした。ユーザ登録は完了しました。引き続き当サービスを宜しくお願い致します。";
+            alertHeader.className = "alert alert-success fixed-top";
+        }
+        
         $("#header-alert").fadeIn();
         setTimeout(hiddenAlert, 5*1000, "#header-alert");
         sessionStorage.removeItem("alertString");

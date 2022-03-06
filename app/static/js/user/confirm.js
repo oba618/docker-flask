@@ -14,8 +14,19 @@ $(window).load(function(){
 
         // 成功の場合
         XHR.addEventListener("load", function(event) {
-            alert("お疲れ様でした。ユーザ登録は完了しました。引き続き当サービスを宜しくお願い致します。");
-            if(confirm) {
+
+            // 異常レスポンスの場合
+            if(XHR.response.errorCode >= 400) {
+                loginAlert.innerHTML = [
+                    XHR.response.errorCode,
+                    XHR.response.phrase,
+                    XHR.response.message
+                ].join("<br>")
+                $("#loginAlert").fadeIn();
+            }
+
+            else {
+                sessionStorage.setItem('alertString', 'userConfirmed');
                 window.location.href = '/user/login';
             }
         });

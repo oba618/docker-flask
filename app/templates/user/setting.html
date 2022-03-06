@@ -4,27 +4,27 @@
     <main role="main" class="inner cover">
         <h3 class="cover-heading">プロフィール変更</h1>
         <div id="loadingSpinner" class="spinner-border text-light" role="status" style="display: inline-block;"></div>
-        <div id="profileContainer" style="display: none">
-            <div class="pb-5">
+        <div id="profileContainer" class="row" style="display: none">
+            <div class="col-sm-6 col-md-4 pb-5">
                 <p>ユーザID</p>
                 <p id="userIdP"></p>
             </div>
-            <div class="pb-5">
+            <div class="col-sm-6 col-md-4 pb-5">
                 <p>メールアドレス</p>
                 <p id="loginId"></p>
             </div>
-            <form id="changeUserNameForm" class="pb-5">
+            <form id="changeUserNameForm" class="col-sm-12 col-md-4 pb-5">
                 <div class="form-group">
                     <label class="form-label" for="userName">ユーザ名: 20文字以下</label>
                     <input class="form-control" id="userName" type="text" name="userName" maxlength="20" required>
                 </div>
                 <input class="" type="submit" value="変更する">
             </form>
-            <div class="py-5">
+            <div class="container py-5">
                 <h3>投稿したエピソード</h3>
                 {% raw %}
-                <div id="postEpisodeList" class="text-left">
-                    <div v-for="item in episodeList" class="py-3">
+                <div id="postEpisodeList" class="text-left row gx-5">
+                    <div v-for="item in episodeList" class="py-3 col-sm-6 col-md-4 border border-white rounded">
                         <div class="border-bottom border-white">{{ item.title }}</div>
                         <div class="">{{ item.episode }}</div>
                         <div class="text-right">
@@ -36,9 +36,11 @@
                 {% endraw %}
             </div>
         </div>
+        <div class="pb-5">
+            <button id="logout" class="btn btn-secondary">ログアウト</button>
+        </div>
         <div>
-            <button id="logout" class="mb-2">ログアウト</button>
-            <p><a href="/user/delete">ユーザ削除</a></p>
+            <button id="userDelete" class="btn btn-dark">ユーザ削除</button>
         </div>
     </main>
 

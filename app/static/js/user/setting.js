@@ -9,7 +9,8 @@ $(window).load(function(){
     const loginId = document.getElementById("loginId");
     const userIdP = document.getElementById("userIdP");
     const changeUserNameForm = document.getElementById("changeUserNameForm");
-    const logout = document.getElementById("logout")
+    const logout = document.getElementById("logout");
+    const userDelete = document.getElementById("userDelete");
 
     logout.addEventListener("click", function(){
         /**
@@ -19,6 +20,13 @@ $(window).load(function(){
         sessionStorage.setItem('alertString', 'logout');
 
         location.href = "/process/logout";
+    });
+
+    userDelete.addEventListener("click", function(){
+        /**
+         * ユーザ削除画面へ
+         */
+        location.href = "/user/delete";
     });
 
     changeUserNameForm.addEventListener("submit", function (event) {
@@ -162,10 +170,12 @@ $(window).load(function(){
                 if(confirm("このエピソードを削除します。よろしいですか？")) {
                     $.ajax({
                         type: "DELETE",
-                        url: [
-                            Const.BASE_PATH, "adage", adageId, "episode", userId,
-                        ].join("/"),
+                        url: [Const.BASE_PATH, "episode"].join("/"),
                         headers: {'Authorization': idToken,},
+                        data: JSON.stringify({
+                            "adageId": adageId,
+                            "userId": userId,
+                        }),
                         dataType: "json",
                         cache: false,
                         timeout: 10000,
