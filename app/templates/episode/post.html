@@ -4,8 +4,12 @@
     <main role="main" class="inner cover">
         <h1 class="cover-heading">{{ input_values.title }}</h1>
         <p class="lead pb-5">
+            {% if input_values.episode %}
+            エピソード更新フォームです。<br>
+            {% else %}
             エピソード投稿フォームです。<br>
-            ”{{ input_values.title }}”にまつわるエピソードを教えてください！
+            {% endif %}
+            この格言にまつわるエピソードを教えてください！
         </p>
         <div class="alert alert-danger" role="alert" id="loginAlert" style="display: none">
             エピソードを投稿するには、<a href="/user/login/adage/episode/post/{{ input_values.id }}/{{ input_values.title }}" class="alert-link">ログイン</a>が必要です。
@@ -14,9 +18,15 @@
             <input type="text" value="{{ input_values.id }}" name="adageId" hidden>
             <div class="form-group">
                 <label class="form-label" for="episode">エピソード: 5,000文字以下</label>
-                <textarea rows="10" id="inputTextEpisode" class="form-control" name="episode" required maxlength="5000"></textarea>
+                <textarea rows="10" id="inputTextEpisode" class="form-control"
+                    name="episode" required maxlength="5000"
+                >{% if input_values.episode %}{{ input_values.episode }}{% endif %}</textarea>
             </div>
+            {% if input_values.episode %}
+            <input id="postEpisodeButton" class="" type="submit" value="更新">
+            {% else %}
             <input id="postEpisodeButton" class="" type="submit" value="投稿">
+            {% endif %}
         </form>
         <div class="alert alert-success" role="alert" id="thanksAlert" style="display: none">
             登録完了しました！共有ありがとうございます！

@@ -34,6 +34,7 @@ $(window).load(function(){
             else {
                 sessionStorage.setItem('idToken', XHR.response.idToken);
                 sessionStorage.setItem('accessToken', XHR.response.accessToken);
+                sessionStorage.setItem('userId', XHR.response.userId);
                 sessionStorage.setItem('userName', XHR.response.userName);
                 sessionStorage.setItem('alertString', 'login');
 

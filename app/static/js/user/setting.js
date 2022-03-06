@@ -4,12 +4,22 @@ $(window).load(function(){
     "use strict";
 
     const idToken = sessionStorage.getItem("idToken");
+    const userId = sessionStorage.getItem("userId");
     const userName = document.getElementById("userName");
+    const loginId = document.getElementById("loginId");
+    const userIdP = document.getElementById("userIdP");
     const changeUserNameForm = document.getElementById("changeUserNameForm");
+    const logout = document.getElementById("logout")
 
-    function hiddenAlert(id) {
-        $(id).fadeOut();
-    }
+    logout.addEventListener("click", function(){
+        /**
+         * ログアウト処理
+         */
+        sessionStorage.clear();
+        sessionStorage.setItem('alertString', 'logout');
+
+        location.href = "/process/logout";
+    });
 
     changeUserNameForm.addEventListener("submit", function (event) {
         /**
@@ -49,55 +59,132 @@ $(window).load(function(){
         XHR.send(JSON.stringify(formDataObj));
     });
 
-    function getUser() {
-        /**
-         * ユーザを取得
-         */
-        const XHR = new XMLHttpRequest();
-
-        // 成功の場合
-        XHR.addEventListener("load", function(event) {
-            if(XHR.response.errorCode >= 400) {
-                loginAlert.innerHTML = [
-                    XHR.response.errorCode,
-                    XHR.response.phrase,
-                    XHR.response.message
-                ].join("<br>")
-                $("#loginAlert").fadeIn();
+    const app = Vue.createApp({
+        data() {
+            return {
+                episodeList: []
             }
-            else {
-                console.log(XHR.response);
-                userName.value = XHR.response.userName;
-                $("#loadingSpinner").hide();
-                $("#profileContainer").fadeIn();
+        },
+        methods: {
+            /**
+             * ユーザ情報参照
+             */
+            getUser() {
+                const XHR = new XMLHttpRequest();
+        
+                // 成功の場合
+                XHR.addEventListener("load", function(event) {
+                    if(XHR.response.errorCode >= 400) {
+                        loginAlert.innerHTML = [
+                            XHR.response.errorCode,
+                            XHR.response.phrase,
+                            XHR.response.message
+                        ].join("<br>")
+                        $("#loginAlert").fadeIn();
+                    }
+                    else {
+                        loginId.innerHTML = XHR.response.loginId;
+                        userIdP.innerHTML = userId;
+                        userName.value = XHR.response.userName;
+
+                        const episodeList = XHR.response.episodeList;
+                        for(var i in episodeList) {
+                            const item = episodeList[i];
+                            const pathAdage = "/adage/" + item['adageId'];
+                            app.episodeList.push(
+                                {
+                                    title: item["title"],
+                                    adageId: item["adageId"],
+                                    episode: item["episode"],
+                                }
+                            );
+                        }
+        
+                        $("#loadingSpinner").hide();
+                        $("#profileContainer").fadeIn();
+        
+                    }
+                });
+            
+                // 失敗の場合
+                XHR.addEventListener("error", function(event) {
+                    logout();
+                });
+        
+                // リクエスト
+                XHR.responseType = "json";
+                XHR.open("GET", Const.BASE_PATH + "/user");
+                XHR.setRequestHeader( 'Content-Type', 'application/json' );
+                XHR.setRequestHeader( 'Authorization', idToken );
+                XHR.send();
+            },
+
+            /**
+             * エピソード編集画面へ
+             * 
+             * @param {string} adageId 
+             * @param {string} title 
+             */
+            episodeEdit(adageId, title) {
+                $.ajax({
+                    type: "GET",
+                    url: [
+                        Const.BASE_PATH, "adage", adageId, "episode", userId,
+                    ].join("/"),
+                    headers: {'Authorization': idToken,},
+                    dataType: "json",
+                    cache: false,
+                    timeout: 10000,
+                    async : false,
+                })
+                // 成功
+                .done(function (data, textStatus, jqXHR) {
+                    location.href = [
+                        "/adage/episode/post",
+                        adageId,
+                        title,
+                        data.episode,
+                    ].join("/");
+                })
+                // 失敗
+                .fail(function (jqXHR, textStatus, errorThrown) {
+                    alert("error=" + jqXHR.statusText
+                                + ", status=" + jqXHR.status);
+                });
+            },
+
+            /**
+             * エピソード削除
+             * 
+             * @param {string} adageId 
+             */
+            episodeDelete(adageId) {
+                if(confirm("このエピソードを削除します。よろしいですか？")) {
+                    $.ajax({
+                        type: "DELETE",
+                        url: [
+                            Const.BASE_PATH, "adage", adageId, "episode", userId,
+                        ].join("/"),
+                        headers: {'Authorization': idToken,},
+                        dataType: "json",
+                        cache: false,
+                        timeout: 10000,
+                        async : false,
+                    })
+                    // 成功
+                    .done(function (data, textStatus, jqXHR) {
+                        location.href = "/user/setting";
+                    })
+                    // 失敗
+                    .fail(function (jqXHR, textStatus, errorThrown) {
+                        alert("error=" + jqXHR.statusText
+                                    + ", status=" + jqXHR.status);
+                    });
+                }
             }
-        });
-    
-        // 失敗の場合
-        XHR.addEventListener("error", function(event) {
-            alert(XHR.response);
-        });
-
-        // リクエスト
-        XHR.responseType = "json";
-        XHR.open("GET", Const.BASE_PATH + "/user");
-        XHR.setRequestHeader( 'Content-Type', 'application/json' );
-        XHR.setRequestHeader( 'Authorization', idToken );
-        XHR.send();
-    }
-
-
-    $("#logout").click(function(){
-        /**
-         * ログアウト処理
-         */
-        sessionStorage.removeItem("idToken");
-        sessionStorage.removeItem("accessToken");
-        sessionStorage.setItem('alertString', 'logout');
-
-        location.href = "/process/logout";
-    });
+        }
+    }).mount("#postEpisodeList")
 
     // ユーザ参照
-    getUser();
+    app.getUser();
 });

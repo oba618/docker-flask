@@ -33,13 +33,15 @@ def adage_post():
     )
 
 
-@app.route("/adage/episode/post/<string:adage_id>/<string:adage_title>")
-def adage_episode_post(adage_id: str, adage_title: str):
+@app.route("/adage/episode/post/<adage_id>/<adage_title>")
+@app.route("/adage/episode/post/<adage_id>/<adage_title>/<my_episode>")
+def adage_episode_post(adage_id: str, adage_title: str, my_episode: str=''):
     return render_template(
         'episode/post.html',
         input_values={
             'id': adage_id,
             'title': adage_title,
+            'episode': my_episode,
             'js_path': 'episode',
             'js_file_name': 'post.js',
         },

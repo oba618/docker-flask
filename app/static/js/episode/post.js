@@ -8,6 +8,10 @@ $(window).load(function(){
     const inputTextEpisode = document.getElementById("inputTextEpisode");
     const postEpisodeButton = document.getElementById("postEpisodeButton");
 
+    function hiddenAlert(id) {
+        $(id).fadeOut();
+    }
+
     form.addEventListener("submit", function (event) {
         event.preventDefault();
 
