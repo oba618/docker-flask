@@ -43,20 +43,26 @@ $(window).load(function(){
             alert(XHR.response);
         });
 
-        // リクエスト
-        XHR.responseType = "text";
-        XHR.open("POST", Const.BASE_PATH + "/adage");
-        XHR.setRequestHeader( 'Content-Type', 'application/json' );
-        XHR.setRequestHeader( 'Authorization', idToken );
-        XHR.send(JSON.stringify(formDataObj));
+        // ゲストユーザ: リクエスト
+        if(idToken === null) {
+            XHR.responseType = "json";
+            XHR.open("POST", Const.BASE_PATH + "/adage/guest");
+            XHR.setRequestHeader( 'Content-Type', 'application/json' );
+            XHR.send(JSON.stringify(formDataObj));
+        }
+
+        // ログインユーザ: リクエスト
+        else {
+            XHR.responseType = "json";
+            XHR.open("POST", Const.BASE_PATH + "/adage");
+            XHR.setRequestHeader( 'Content-Type', 'application/json' );
+            XHR.setRequestHeader( 'Authorization', idToken );
+            XHR.send(JSON.stringify(formDataObj));
+        }
     });
-    console.log(idToken);
 
     // idTokenが空の場合
     if(idToken === null) {
-        $("#loginAlert").fadeIn();
-        inputTextTitle.disabled = true;
-        inputTextEpisode.disabled = true;
-        postAdageButton.disabled = true;
+        $("#loginAlert").fadeIn()
     }
 });
