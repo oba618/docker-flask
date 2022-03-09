@@ -1,5 +1,5 @@
 import { Const } from "./common/const.js";
-
+import { Util } from "./common/util.js";
 
 $(window).load(function(){
     "use strict";
@@ -29,8 +29,7 @@ $(window).load(function(){
         })
         // 失敗
         .fail(function (jqXHR, textStatus, errorThrown) {
-            alert("error=" + jqXHR.statusText
-                        + ", status=" + jqXHR.status);
+            Util.showAlertDanger(Const.MESSAGE_ERROR_REQUEST);
         });
 
         return adage_list;
@@ -82,8 +81,7 @@ $(window).load(function(){
         })
         // 失敗
         .fail(function (jqXHR, textStatus, errorThrown) {
-            console.log("error=" + jqXHR.statusText
-                + ", status=" + jqXHR.status)
+            Util.showAlertDanger(Const.MESSAGE_ERROR_REQUEST);
         });
     }
 
