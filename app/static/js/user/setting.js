@@ -10,11 +10,10 @@ $(window).load(function(){
     const loginId = document.getElementById("loginId");
     const userIdP = document.getElementById("userIdP");
     const changeUserNameForm = document.getElementById("changeUserNameForm");
-    const logout = document.getElementById("logout");
+    const logoutButton = document.getElementById("logoutButton");
     const userDelete = document.getElementById("userDelete");
-    const alertDangerText = document.getElementById("alertDangerText");
 
-    logout.addEventListener("click", function(){
+    function logout() {
         /**
          * ログアウト処理
          */
@@ -22,6 +21,10 @@ $(window).load(function(){
         sessionStorage.setItem('alertString', 'logout');
 
         location.href = "/process/logout";
+    }
+
+    logoutButton.addEventListener("click", function(){
+        logout();
     });
 
     userDelete.addEventListener("click", function(){
@@ -113,6 +116,7 @@ $(window).load(function(){
             
                 // 失敗の場合(idToken有効期限切れの場合)
                 XHR.addEventListener("error", function(event) {
+                    alert("認証有効期限が切れたためログアウトします")
                     logout();
                 });
         
