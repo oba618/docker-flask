@@ -41,7 +41,7 @@ $(window).load(function(){
         
         // 失敗の場合
         XHR.addEventListener("error", function(event) {
-            Util.showAlertDanger(Const.MESSAGE_ERROR_REQUEST));
+            Util.showAlertDanger(Const.MESSAGE_ERROR_REQUEST);
         });
         
         // リクエスト
