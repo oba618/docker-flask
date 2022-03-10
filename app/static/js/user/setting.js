@@ -1,4 +1,5 @@
 import { Const } from "../common/const.js";
+import { Util } from "../common/util.js";
 
 $(window).load(function(){
     "use strict";
@@ -9,10 +10,10 @@ $(window).load(function(){
     const loginId = document.getElementById("loginId");
     const userIdP = document.getElementById("userIdP");
     const changeUserNameForm = document.getElementById("changeUserNameForm");
-    const logout = document.getElementById("logout");
+    const logoutButton = document.getElementById("logoutButton");
     const userDelete = document.getElementById("userDelete");
 
-    logout.addEventListener("click", function(){
+    function logout() {
         /**
          * ログアウト処理
          */
@@ -20,6 +21,10 @@ $(window).load(function(){
         sessionStorage.setItem('alertString', 'logout');
 
         location.href = "/process/logout";
+    }
+
+    logoutButton.addEventListener("click", function(){
+        logout();
     });
 
     userDelete.addEventListener("click", function(){
@@ -44,7 +49,7 @@ $(window).load(function(){
 
             // 異常レスポンスの場合
             if(XHR.response.errorCode >= 400) {
-
+                Util.showAlertDanger(XHR.response);
             }
 
             // 正常レスポンスの場合
@@ -56,7 +61,7 @@ $(window).load(function(){
 
         // 失敗の場合
         XHR.addEventListener("error", function(event) {
-            alert("エラーが発生しました");
+            Util.showAlertDanger(Const.MESSAGE_ERROR_REQUEST);
         });
 
         // リクエスト
@@ -83,12 +88,7 @@ $(window).load(function(){
                 // 成功の場合
                 XHR.addEventListener("load", function(event) {
                     if(XHR.response.errorCode >= 400) {
-                        loginAlert.innerHTML = [
-                            XHR.response.errorCode,
-                            XHR.response.phrase,
-                            XHR.response.message
-                        ].join("<br>")
-                        $("#loginAlert").fadeIn();
+                        Util.showAlertDanger(XHR.response);
                     }
                     else {
                         loginId.innerHTML = XHR.response.loginId;
@@ -114,8 +114,9 @@ $(window).load(function(){
                     }
                 });
             
-                // 失敗の場合
+                // 失敗の場合(idToken有効期限切れの場合)
                 XHR.addEventListener("error", function(event) {
+                    alert("認証有効期限が切れたためログアウトします")
                     logout();
                 });
         
@@ -156,8 +157,7 @@ $(window).load(function(){
                 })
                 // 失敗
                 .fail(function (jqXHR, textStatus, errorThrown) {
-                    alert("error=" + jqXHR.statusText
-                                + ", status=" + jqXHR.status);
+                    Util.showAlertDanger(Const.MESSAGE_ERROR_REQUEST);
                 });
             },
 
@@ -183,12 +183,12 @@ $(window).load(function(){
                     })
                     // 成功
                     .done(function (data, textStatus, jqXHR) {
+                        sessionStorage.setItem("alertString", "episodeDelete");
                         location.href = "/user/setting";
                     })
                     // 失敗
                     .fail(function (jqXHR, textStatus, errorThrown) {
-                        alert("error=" + jqXHR.statusText
-                                    + ", status=" + jqXHR.status);
+                        Util.showAlertDanger(Const.MESSAGE_ERROR_REQUEST);
                     });
                 }
             }

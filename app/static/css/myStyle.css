@@ -44,7 +44,7 @@ body > .body-background {
   height: auto;
 }
 
-@media (max-width: 424px) {
+@media (max-width: 767px) {
   .p-3 {
     padding: 0.5rem !important;
   }

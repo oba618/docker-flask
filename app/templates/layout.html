@@ -34,7 +34,17 @@
     </header>
 
     <!-- alert -->
-    <div id="header-alert" class="alert alert-danger fixed-top" role="alert" style="display: none"></div>
+    <div id="alertSuccess" class="alert alert-success" role="alert" style="display: none">
+        <span id="alertSuccessText" class="pr-3"></span><i class="fa-solid fa-xmark"></i>
+    </div>
+    <div id="alertDanger" class="alert alert-danger" role="alert" style="display: none">
+        <span id="alertDangerText" class="pr-3"></span><i class="fa-solid fa-xmark"></i>
+    </div>
+    <div id="alertWarningLogin" class="alert alert-warning" role="alert" style="display: none">
+        <span><a href="/user/login" class="alert-link">ログイン</a>
+        していないゲストユーザーの投稿は、<br>
+        ユーザーによる審査を通過した後に掲載されます。</span><i class="fa-solid fa-xmark"></i>
+    </div>
 
     {% block content %}
     <!-- content -->

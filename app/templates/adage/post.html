@@ -6,10 +6,6 @@
         <p class="lead pb-5">
             このフォームではあなたの座右の銘を共有することができます。
         </p>
-        <div class="alert alert-warning" role="alert" id="loginAlert" style="display: none">
-            <a href="/user/login" class="alert-link">ログイン</a>していないゲストユーザーの投稿は、<br>
-            ユーザーによる審査を通過した後に登録されます。
-        </div>
         <form id="adagePostForm" class="pb-5">
             <div class="form-group">
                 <label class="form-label" for="title">格言: 必須(200文字以下)</label>
@@ -21,9 +17,6 @@
             </div>
             <input id="postAdageButton" type="submit" value="送信">
         </form>
-        <div class="alert alert-success" role="alert" id="thanksAlert" style="display: none">
-            登録完了しました！共有ありがとうございます！
-        </div>
     </main>
 
     {% endblock %}
