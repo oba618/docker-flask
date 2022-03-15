@@ -8,6 +8,8 @@ $(window).load(function(){
 
     form.addEventListener("submit", function (event) {
         event.preventDefault();
+        const submitButton = document.getElementById("submitButton");
+        submitButton.disabled = true;
 
         const XHR = new XMLHttpRequest();
         const FD  = new FormData(form);

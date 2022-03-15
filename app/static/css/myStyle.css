@@ -199,3 +199,17 @@ body > .body-background {
   opacity: 0;
   transform: translateY(-30px);
 }
+
+
+.fadeout {
+  animation : fadeOut 1s;
+  animation-fill-mode: both;
+}
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}

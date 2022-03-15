@@ -7,6 +7,8 @@ $(window).load(function(){
     $("#loadingSpinner").hide();
     $("#adageContainer").fadeIn();
 
+    const idToken = sessionStorage.getItem("idToken");
+    const userId = sessionStorage.getItem("userId");
     let index_number = 0;
 
     const fixTwitterShareButton = function fixTwitterShareButton(adageTitle) {
@@ -38,7 +40,45 @@ $(window).load(function(){
         index_number++;
     }
 
-    function updateLikePoints(adageId) {
+    function effectHeart(likesIcon) {
+        likesIcon.firstChild.className = 'fas fa-heart LikesIcon-fa-heart heart';
+        setTimeout(function() {
+            likesIcon.firstChild.className = 'far fa-heart LikesIcon-fa-heart';
+        },1000);
+    }
+
+    function sendHeart() {
+        const XHR = new XMLHttpRequest();
+
+        // 成功
+        XHR.addEventListener("load", function() {
+            
+            // 異常レスポンスの場合
+            if(XHR.response.errorCode >= 400) {
+                Util.showAlertDanger(XHR.response);
+            }
+
+            // 正常レスポンスの場合
+            else {
+                console.log(XHR.response);
+            }
+        });
+
+        // 失敗の場合
+        XHR.addEventListener("error", function(event) {
+            Util.showAlertDanger(Const.MESSAGE_ERROR_REQUEST);
+        });
+
+        // リクエスト
+        const path = [Const.BASE_PATH, "heart", userId].join("/");
+        XHR.responseType = "json";
+        XHR.open("POST", path);
+        XHR.setRequestHeader( 'Content-Type', 'application/json' );
+        XHR.setRequestHeader( 'Authorization', idToken );
+        XHR.send();
+    }
+
+    function updateLikePoints(adageId, episodeUserId="") {
         /**
          * いいねポイントを更新
          */
@@ -54,18 +94,29 @@ $(window).load(function(){
 
             // 正常レスポンスの場合
             else {
+
+                // ログインしている場合、ハート履歴追加
+                if(userId && idToken) {
+                    sendHeart();
+                }
                 console.log(XHR.response);
             }
         });
-        
+
         // 失敗の場合
         XHR.addEventListener("error", function(event) {
             Util.showAlertDanger(Const.MESSAGE_ERROR_REQUEST);
         });
+
+        // パス
+        let path = [Const.BASE_PATH, "adage", adageId].join("/");
+        if(! episodeUserId == "") {
+            path = [path, "episode", episodeUserId].join("/")
+        }
         
         // リクエスト
         XHR.responseType = "json";
-        XHR.open("PATCH", [Const.BASE_PATH, "adage", adageId].join("/"));
+        XHR.open("PATCH", path);
         XHR.setRequestHeader( 'Content-Type', 'application/json' );
         XHR.send();
     }
@@ -125,17 +176,24 @@ $(window).load(function(){
                 }
             },
 
-            increasePoints(adage, index) {
-                const adageId = document.getElementById('adageId' + index).textContent
-                updateLikePoints(adageId)
-                
-                const likesIcon = document.getElementById("LikesIcon" + index);
-                likesIcon.firstChild.className = 'fas fa-heart LikesIcon-fa-heart heart';
-                setTimeout(function() {
-                    likesIcon.firstChild.className = 'far fa-heart LikesIcon-fa-heart';
-                },1000);
+            increasePoints(adage) {
+                const adageId = adage.adageId;
 
+                const likesIcon = document.getElementById("likesIcon#" + adageId);
                 adage.likePoints++;
+
+                updateLikePoints(adageId);
+
+                effectHeart(likesIcon);
+            },
+
+            increaseEpisodePoints(adage, episode) {
+                const likesIcon = document.getElementById("likesIcon#" + episode.key);
+                episode.likePoints++;
+
+                updateLikePoints(adage.adageId, episode.userId);
+
+                effectHeart(likesIcon);
             },
 
             addEpisode(adageId, adageTitle) {

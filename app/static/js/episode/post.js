@@ -10,6 +10,8 @@ $(window).load(function(){
 
     form.addEventListener("submit", function (event) {
         event.preventDefault();
+        const postEpisodeButton = document.getElementById("postEpisodeButton");
+        postEpisodeButton.disabled = true;
 
         const XHR = new XMLHttpRequest();
         const FD  = new FormData(form);

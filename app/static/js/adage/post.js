@@ -9,6 +9,8 @@ $(window).load(function(){
 
     form.addEventListener("submit", function (event) {
         event.preventDefault();
+        const postAdageButton = document.getElementById("postAdageButton");
+        postAdageButton.disabled = true;
 
         const XHR = new XMLHttpRequest();
         const FD  = new FormData(form);
