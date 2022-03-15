@@ -119,6 +119,9 @@ $(window).load(function(){
             },
 
             putUserName: function() {
+                const submitUserNameButton = document.getElementById("submitUserNameButton");
+                submitUserNameButton.disabled = true;
+
                 const changeUserNameForm = document.getElementById("changeUserNameForm");
 
                 const XHR = new XMLHttpRequest();

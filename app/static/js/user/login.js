@@ -12,6 +12,8 @@ $(window).load(function(){
          * 格言送信
          */
         event.preventDefault();
+        const submitButton = document.getElementById("submitButton");
+        submitButton.disabled = true;
 
         const XHR = new XMLHttpRequest();
         const FD  = new FormData(form);
