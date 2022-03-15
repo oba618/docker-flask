@@ -193,28 +193,39 @@ $(window).load(function(){
              */
             episodeDelete(adageId) {
                 if(confirm("このエピソードを削除します。よろしいですか？")) {
-                    $.ajax({
-                        type: "DELETE",
-                        url: [Const.BASE_PATH, "episode"].join("/"),
-                        headers: {'Authorization': idToken,},
-                        data: JSON.stringify({
-                            "adageId": adageId,
-                            "userId": userId,
-                        }),
-                        dataType: "json",
-                        cache: false,
-                        timeout: 10000,
-                        async : false,
-                    })
-                    // 成功
-                    .done(function (data, textStatus, jqXHR) {
-                        sessionStorage.setItem("alertString", "episodeDelete");
-                        location.href = "/user/setting";
-                    })
-                    // 失敗
-                    .fail(function (jqXHR, textStatus, errorThrown) {
+                    const XHR = new XMLHttpRequest();
+
+                    // 成功の場合
+                    XHR.addEventListener("load", function(event) {
+
+                        // 異常レスポンスの場合
+                        if(XHR.response.errorCode >= 400) {
+                            Util.showAlertDanger(XHR.response);
+                        }
+
+                        // 正常レスポンスの場合
+                        else {
+                            sessionStorage.setItem("alertString", "episodeDelete");
+                            location.href = "/user/setting";
+                        }
+                    });
+
+                    // 失敗の場合
+                    XHR.addEventListener("error", function(event) {
                         Util.showAlertDanger(Const.MESSAGE_ERROR_REQUEST);
                     });
+    
+                    // リクエスト
+                    const path = [
+                        Const.BASE_PATH,
+                        "episode",
+                        adageId,
+                    ].join("/")
+                    XHR.responseType = "json";
+                    XHR.open("DELETE", path);
+                    XHR.setRequestHeader( 'Content-Type', 'application/json' );
+                    XHR.setRequestHeader( 'Authorization', idToken );
+                    XHR.send();
                 }
             },
 
