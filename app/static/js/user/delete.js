@@ -1,4 +1,5 @@
 import { Const } from "../common/const.js";
+import { Util } from "../common/util.js";
 
 $(window).load(function(){
     "use strict";
@@ -17,6 +18,8 @@ $(window).load(function(){
 
     form.addEventListener("submit", function (event) {
         event.preventDefault();
+        const submitButton = document.getElementById("submitButton");
+        submitButton.disabled = true;
 
         const XHR = new XMLHttpRequest();
         const FD  = new FormData(form);
@@ -27,12 +30,7 @@ $(window).load(function(){
 
             // 異常レスポンスの場合
             if(XHR.response.errorCode >= 400) {
-                loginAlert.innerHTML = [
-                    XHR.response.errorCode,
-                    XHR.response.phrase,
-                    XHR.response.message
-                ].join("<br>")
-                $("#loginAlert").fadeIn();
+                Util.showAlertDanger(XHR.response);
             }
 
             // 正常レスポンスの場合
@@ -45,7 +43,7 @@ $(window).load(function(){
         
         // 失敗の場合
         XHR.addEventListener("error", function(event) {
-            alert(XHR.response);
+            Util.showAlertDanger(Const.MESSAGE_ERROR_REQUEST);
         });
         
         // リクエスト

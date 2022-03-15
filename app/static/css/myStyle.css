@@ -44,7 +44,7 @@ body > .body-background {
   height: auto;
 }
 
-@media (max-width: 424px) {
+@media (max-width: 767px) {
   .p-3 {
     padding: 0.5rem !important;
   }
@@ -198,4 +198,18 @@ body > .body-background {
 .list-leave-to {
   opacity: 0;
   transform: translateY(-30px);
+}
+
+
+.fadeout {
+  animation : fadeOut 1s;
+  animation-fill-mode: both;
+}
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }

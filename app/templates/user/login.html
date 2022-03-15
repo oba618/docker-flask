@@ -6,9 +6,6 @@
         <p class="lead pb-5">
             このフォームではユーザーログインができます。
         </p>
-        <div class="alert alert-danger" role="alert" id="loginAlert" style="display: none">
-            Error
-        </div>
         <form id="userLoginForm" class="pb-5">
             <div class="form-group">
                 <label class="form-label" for="loginId">メールアドレス</label>
@@ -21,7 +18,7 @@
             {% if input_values.return_path %}
             <div id="returnPath" hidden>{{ input_values.return_path }}</div>
             {% endif %}
-            <input class="" type="submit" value="送信">
+            <input id="submitButton" class="" type="submit" value="送信">
         </form>
         <p><a href="/user/singup">新規登録はこちら</a></p>
         <p><a href="/user/sendResetPasswordCode">パスワードをお忘れですか？</a></p>

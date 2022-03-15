@@ -1,7 +1,7 @@
 $(window).load(function(){
     "use strict";
 
-    const alertHeader = document.getElementById("header-alert");
+    const alertSuccessText = document.getElementById("alertSuccessText");
     const alertString = sessionStorage.getItem("alertString");
 
     function hiddenAlert(id) {
@@ -10,34 +10,48 @@ $(window).load(function(){
 
     function showHeaderAlert() {
         if(alertString == "logout") {
-            alertHeader.innerText = "ログアウトしました";
-            alertHeader.className = "alert alert-success fixed-top";
+            alertSuccessText.innerText = "ログアウトしました";
         }
         else if(alertString == "login") {
-            alertHeader.innerText = "ログインしました";
-            alertHeader.className = "alert alert-success fixed-top";
+            alertSuccessText.innerText = "ログインしました";
+        }
+        else if(alertString == "resetPasswordSuccess") {
+            alertSuccessText.innerText = "パスワード設定が完了しました";
         }
         else if(alertString == "userPut") {
-            alertHeader.innerText = "ユーザを更新しました";
-            alertHeader.className = "alert alert-success fixed-top";
+            alertSuccessText.innerText = "ユーザを更新しました";
         }
         else if(alertString == "userDelete") {
-            alertHeader.innerText = "ユーザを削除しました";
-            alertHeader.className = "alert alert-success fixed-top";
+            alertSuccessText.innerText = "ユーザを削除しました";
         }
         else if(alertString == "sendConfirmCode") {
-            alertHeader.innerText = "メールアドレスに認証コードを送信しました。";
-            alertHeader.className = "alert alert-success fixed-top";
+            alertSuccessText.innerText = "メールアドレスに認証コードを送信しました。";
         }
         else if(alertString == "userConfirmed") {
-            alertHeader.innerText = "お疲れ様でした。ユーザ登録は完了しました。引き続き当サービスを宜しくお願い致します。";
-            alertHeader.className = "alert alert-success fixed-top";
+            alertSuccessText.innerText = "お疲れ様でした。ユーザ登録は完了しました。引き続き当サービスを宜しくお願い致します。";
         }
-        
-        $("#header-alert").fadeIn();
-        setTimeout(hiddenAlert, 5*1000, "#header-alert");
+        else if(alertString == "episodePost" || alertString == 'adagePost') {
+            alertSuccessText.innerText = "登録完了しました。共有ありがとうございます！";
+        }
+        else if(alertString == "episodeDelete") {
+            alertSuccessText.innerText = "エピソードを削除しました";
+        }
+
+        $("#alertSuccess").fadeIn();
         sessionStorage.removeItem("alertString");
     }
+
+    $("#alertSuccess").on("click", function() {
+        hiddenAlert("#alertSuccess")
+    });
+
+    $("#alertDanger").on("click", function() {
+        hiddenAlert("#alertDanger")
+    });
+
+    $("#alertWarningLogin").on("click", function() {
+        hiddenAlert("#alertWarningLogin")
+    });
 
     function activeHeaderNav() {
         /**

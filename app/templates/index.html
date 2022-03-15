@@ -11,15 +11,14 @@
         <div id="adageContainer" style="display: none">
             <transition-group name="list" tag="div">
                 <div v-for="(adage, index) in adages" :key="adage.adageId" class="list-item pb-5">
-                    <div :id="'adageId' + index" hidden>{{ adage.adageId }}</div>
                     <h2 class="cover-adage">
                         "{{ adage.title }}"
                     </h2>
                     <div class="d-flex justify-content-center pb-3">
-                        <div :id="'LikesIcon' + index" v-on:click="increasePoints(adage, index)">
+                        <div :id="'likesIcon#' + adage.adageId" v-on:click="increasePoints(adage)">
                             <i class="far fa-heart LikesIcon-fa-heart"></i>
                         </div>
-                        <div :id="'likePoints' + index" class="px-3">
+                        <div class="px-3">
                             {{ adage.likePoints }}
                         </div>
                         <div :id="'twitterShareButton' + index">
@@ -29,6 +28,14 @@
                     <div class="adage-episode-container">
                         <div v-for="item in adage.episode" class="episode-block">
                             <p>{{ item.userName }} : {{ item.episode }}</p>
+                            <div class="d-flex justify-content-center pb-3">
+                                <div :id="'likesIcon#' + item.key" @click="increaseEpisodePoints(adage, item)">
+                                    <i class="far fa-heart LikesIcon-fa-heart"></i>
+                                </div>
+                                <div class="px-3">
+                                    {{ item.likePoints }}
+                                </div>
+                            </div>
                         </div>
                         <button @click="addEpisode(adage.adageId, adage.title)" class="btn btn-dark">エピソードを投稿する</button>
                     </div>

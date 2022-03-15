@@ -1,19 +1,17 @@
 import { Const } from "../common/const.js";
+import { Util } from "../common/util.js";
 
 $(window).load(function(){
     "use strict";
     
     const idToken = sessionStorage.getItem("idToken");
+    const userId = sessionStorage.getItem("userId");
     const form = document.getElementById("episodePostForm");
-    const inputTextEpisode = document.getElementById("inputTextEpisode");
-    const postEpisodeButton = document.getElementById("postEpisodeButton");
-
-    function hiddenAlert(id) {
-        $(id).fadeOut();
-    }
 
     form.addEventListener("submit", function (event) {
         event.preventDefault();
+        const postEpisodeButton = document.getElementById("postEpisodeButton");
+        postEpisodeButton.disabled = true;
 
         const XHR = new XMLHttpRequest();
         const FD  = new FormData(form);
@@ -22,38 +20,34 @@ $(window).load(function(){
         // 成功の場合
         XHR.addEventListener("load", function(event) {
             if(XHR.response.errorCode >= 400) {
-                loginAlert.innerHTML = [
-                    XHR.response.errorCode,
-                    XHR.response.phrase,
-                    XHR.response.message
-                ].join("<br>")
-                $("#loginAlert").fadeIn();
+                Util.showAlertDanger(XHR.response);
             }
             else {
-                $("#thanksAlert").fadeIn();
-                inputTextEpisode.value = "";
-                setTimeout(hiddenAlert, 15*1000, "#thanksAlert");
+                sessionStorage.setItem("alertString", "episodePost");
+                location.href = location.href;
             }
         });
     
         // 失敗の場合
         XHR.addEventListener("error", function(event) {
-            alert(XHR.response);
+            Util.showAlertDanger(Const.MESSAGE_ERROR_REQUEST);
         });
 
         // リクエスト
-        XHR.responseType = "text";
+        if(idToken) {
+            formDataObj.userId = userId;
+        }
+        else {
+            formDataObj.userId = 'guest';
+        }
+        XHR.responseType = "json";
         XHR.open("POST", Const.BASE_PATH + "/episode");
         XHR.setRequestHeader( 'Content-Type', 'application/json' );
-        XHR.setRequestHeader( 'Authorization', idToken );
         XHR.send(JSON.stringify(formDataObj));
     });
-    console.log(idToken);
 
-    // idTokenが空の場合
+    // 未ログインの場合
     if(idToken === null) {
-        $("#loginAlert").fadeIn();
-        inputTextEpisode.disabled = true;
-        postEpisodeButton.disabled = true;
+        $("#alertWarningLogin").fadeIn();
     }
 });

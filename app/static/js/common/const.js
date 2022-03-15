@@ -8,6 +8,11 @@ export class Const {
     // static STAGE = "to";
 
     static BASE_PATH = [this.BASE_URL, this.STAGE].join("/");
+
+    // ツイッター共有
     static TWITTER_SHARE_URL = "https://twitter.com/share?ref_src=twsrc%5Etfw";
     static TWITTER_WIDGETS_URL = "https://platform.twitter.com/widgets.js";
+
+    // リクエストエラーメッセージ
+    static MESSAGE_ERROR_REQUEST = "エラーが発生しました"
 }

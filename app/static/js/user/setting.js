@@ -1,76 +1,55 @@
 import { Const } from "../common/const.js";
+import { Util } from "../common/util.js";
 
 $(window).load(function(){
     "use strict";
 
     const idToken = sessionStorage.getItem("idToken");
     const userId = sessionStorage.getItem("userId");
-    const userName = document.getElementById("userName");
-    const loginId = document.getElementById("loginId");
-    const userIdP = document.getElementById("userIdP");
-    const changeUserNameForm = document.getElementById("changeUserNameForm");
-    const logout = document.getElementById("logout");
-    const userDelete = document.getElementById("userDelete");
 
-    logout.addEventListener("click", function(){
-        /**
-         * ログアウト処理
-         */
-        sessionStorage.clear();
-        sessionStorage.setItem('alertString', 'logout');
-
-        location.href = "/process/logout";
-    });
-
-    userDelete.addEventListener("click", function(){
-        /**
-         * ユーザ削除画面へ
-         */
-        location.href = "/user/delete";
-    });
-
-    changeUserNameForm.addEventListener("submit", function (event) {
-        /**
-         * ユーザ名変更
-         */
-        event.preventDefault();
-
+    function removeDbLikePointsHistory(key) {
         const XHR = new XMLHttpRequest();
-        const FD  = new FormData(changeUserNameForm);
-        const formDataObj = Object.fromEntries(FD);
 
         // 成功の場合
         XHR.addEventListener("load", function(event) {
 
             // 異常レスポンスの場合
             if(XHR.response.errorCode >= 400) {
-
+                Util.showAlertDanger(XHR.response);
             }
 
             // 正常レスポンスの場合
             else {
-                sessionStorage.setItem("alertString", "userPut");
-                location.href = "/process/user/name/" + XHR.response.userName;
+                console.log("DELETE HEART HISTORY");
             }
         });
 
         // 失敗の場合
         XHR.addEventListener("error", function(event) {
-            alert("エラーが発生しました");
+            Util.showAlertDanger(Const.MESSAGE_ERROR_REQUEST);
         });
 
         // リクエスト
+        const body = JSON.stringify({
+            key: key,
+        });
+        console.log(body);
         XHR.responseType = "json";
-        XHR.open("PUT", Const.BASE_PATH + "/user");
+        XHR.open("DELETE", [Const.BASE_PATH, "heart"].join("/"));
         XHR.setRequestHeader( 'Content-Type', 'application/json' );
         XHR.setRequestHeader( 'Authorization', idToken );
-        XHR.send(JSON.stringify(formDataObj));
-    });
+        XHR.send(body);
+    }
 
     const app = Vue.createApp({
         data() {
             return {
-                episodeList: []
+                userId: "",
+                loginId: "",
+                userName: "",
+                likePoints: 0,
+                episodeList: [],
+                pointList: []
             }
         },
         methods: {
@@ -83,17 +62,13 @@ $(window).load(function(){
                 // 成功の場合
                 XHR.addEventListener("load", function(event) {
                     if(XHR.response.errorCode >= 400) {
-                        loginAlert.innerHTML = [
-                            XHR.response.errorCode,
-                            XHR.response.phrase,
-                            XHR.response.message
-                        ].join("<br>")
-                        $("#loginAlert").fadeIn();
+                        Util.showAlertDanger(XHR.response);
                     }
                     else {
-                        loginId.innerHTML = XHR.response.loginId;
-                        userIdP.innerHTML = userId;
-                        userName.value = XHR.response.userName;
+                        app.userId = XHR.response.userId;
+                        app.loginId = XHR.response.loginId;
+                        app.userName = XHR.response.userName;
+                        app.likePoints = XHR.response.likePoints;
 
                         const episodeList = XHR.response.episodeList;
                         for(var i in episodeList) {
@@ -107,6 +82,21 @@ $(window).load(function(){
                                 }
                             );
                         }
+
+                        const pointList = XHR.response.pointList;
+                        for(var i in pointList) {
+                            const item = pointList[i];
+                            app.pointList.push(
+                                {
+                                    senderId: item['senderId'],
+                                    senderName: item['senderName'],
+                                    key: item['key'],
+                                    dateTime: item['dateTime'],
+                                    point: item['point'],
+                                    reason: item['reason']
+                                }
+                            )
+                        }
         
                         $("#loadingSpinner").hide();
                         $("#profileContainer").fadeIn();
@@ -114,9 +104,10 @@ $(window).load(function(){
                     }
                 });
             
-                // 失敗の場合
+                // 失敗の場合(idToken有効期限切れの場合)
                 XHR.addEventListener("error", function(event) {
-                    logout();
+                    alert("認証有効期限が切れたためログアウトします")
+                    app.logout();
                 });
         
                 // リクエスト
@@ -125,6 +116,44 @@ $(window).load(function(){
                 XHR.setRequestHeader( 'Content-Type', 'application/json' );
                 XHR.setRequestHeader( 'Authorization', idToken );
                 XHR.send();
+            },
+
+            putUserName: function() {
+                const submitUserNameButton = document.getElementById("submitUserNameButton");
+                submitUserNameButton.disabled = true;
+
+                const changeUserNameForm = document.getElementById("changeUserNameForm");
+
+                const XHR = new XMLHttpRequest();
+                const FD  = new FormData(changeUserNameForm);
+                const formDataObj = Object.fromEntries(FD);
+
+                // 成功の場合
+                XHR.addEventListener("load", function(event) {
+
+                    // 異常レスポンスの場合
+                    if(XHR.response.errorCode >= 400) {
+                        Util.showAlertDanger(XHR.response);
+                    }
+
+                    // 正常レスポンスの場合
+                    else {
+                        sessionStorage.setItem("alertString", "userPut");
+                        location.href = "/process/user/name/" + XHR.response.userName;
+                    }
+                });
+
+                // 失敗の場合
+                XHR.addEventListener("error", function(event) {
+                    Util.showAlertDanger(Const.MESSAGE_ERROR_REQUEST);
+                });
+
+                // リクエスト
+                XHR.responseType = "json";
+                XHR.open("PUT", Const.BASE_PATH + "/user");
+                XHR.setRequestHeader( 'Content-Type', 'application/json' );
+                XHR.setRequestHeader( 'Authorization', idToken );
+                XHR.send(JSON.stringify(formDataObj));
             },
 
             /**
@@ -156,8 +185,7 @@ $(window).load(function(){
                 })
                 // 失敗
                 .fail(function (jqXHR, textStatus, errorThrown) {
-                    alert("error=" + jqXHR.statusText
-                                + ", status=" + jqXHR.status);
+                    Util.showAlertDanger(Const.MESSAGE_ERROR_REQUEST);
                 });
             },
 
@@ -168,32 +196,83 @@ $(window).load(function(){
              */
             episodeDelete(adageId) {
                 if(confirm("このエピソードを削除します。よろしいですか？")) {
-                    $.ajax({
-                        type: "DELETE",
-                        url: [Const.BASE_PATH, "episode"].join("/"),
-                        headers: {'Authorization': idToken,},
-                        data: JSON.stringify({
-                            "adageId": adageId,
-                            "userId": userId,
-                        }),
-                        dataType: "json",
-                        cache: false,
-                        timeout: 10000,
-                        async : false,
-                    })
-                    // 成功
-                    .done(function (data, textStatus, jqXHR) {
-                        location.href = "/user/setting";
-                    })
-                    // 失敗
-                    .fail(function (jqXHR, textStatus, errorThrown) {
-                        alert("error=" + jqXHR.statusText
-                                    + ", status=" + jqXHR.status);
+                    const XHR = new XMLHttpRequest();
+
+                    // 成功の場合
+                    XHR.addEventListener("load", function(event) {
+
+                        // 異常レスポンスの場合
+                        if(XHR.response.errorCode >= 400) {
+                            Util.showAlertDanger(XHR.response);
+                        }
+
+                        // 正常レスポンスの場合
+                        else {
+                            sessionStorage.setItem("alertString", "episodeDelete");
+                            location.href = "/user/setting";
+                        }
                     });
+
+                    // 失敗の場合
+                    XHR.addEventListener("error", function(event) {
+                        Util.showAlertDanger(Const.MESSAGE_ERROR_REQUEST);
+                    });
+    
+                    // リクエスト
+                    const path = [
+                        Const.BASE_PATH,
+                        "episode",
+                        adageId,
+                    ].join("/")
+                    XHR.responseType = "json";
+                    XHR.open("DELETE", path);
+                    XHR.setRequestHeader( 'Content-Type', 'application/json' );
+                    XHR.setRequestHeader( 'Authorization', idToken );
+                    XHR.send();
                 }
+            },
+
+            /**
+             * ログアウト処理
+             */
+            logout() {
+                sessionStorage.clear();
+                sessionStorage.setItem('alertString', 'logout');
+        
+                location.href = "/process/logout";
+            },
+
+            /**
+             * ユーザ削除画面へ
+             */
+            userDelete() {
+                location.href = "/user/delete";
+            },
+
+            /**
+             * ハート履歴削除
+             * @param {string} key 
+             * @param {int} index 
+             */
+            removeHeart(key, index) {
+                const target = document.getElementById(key);
+                const likesIcon = document.getElementById("heart#" + key);
+                likesIcon.firstChild.className = 'fas fa-heart LikesIcon-fa-heart heart';
+                
+                // ハート削除
+                setTimeout(function() {
+                    target.classList.add("fadeout");
+                    
+                    // DynamoDBのlikePoints履歴削除
+                    setTimeout(function(){
+                        console.log(key);
+                        removeDbLikePointsHistory(key);
+                        target.remove();
+                    }, 1000)
+                },1000);
             }
         }
-    }).mount("#postEpisodeList")
+    }).mount("#profileContainer")
 
     // ユーザ参照
     app.getUser();
