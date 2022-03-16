@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block content %}
+    
+    <main role="main" class="inner cover">
+        <h1 class="cover-heading">認証コードが届きませんか？</h1>
+        <p class="lead pb-5">
+            下のフォームに入力されたメールアドレスに、認証コードを再送信します。
+        </p>
+        <form id="resetPasswordForm" class="pb-5">
+            <div class="form-group">
+                <label class="form-label" for="loginId">メールアドレス</label>
+                <input class="form-control" id="inputLoginId" type="email" name="loginId" required>
+            </div>
+            <input id="submitButton" type="submit" value="再送信">
+        </form>
+    </main>
+
+    {% endblock %}

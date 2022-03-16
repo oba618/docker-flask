@@ -72,6 +72,18 @@ def user_confirm():
     )
 
 
+@app.route('/user/resendConfirmCode')
+def user_resend_confirm_code():
+    return render_template(
+        'user/resendConfirmCode.html',
+        input_values={
+            'title': '認証コードが届きませんか？',
+            'js_path': 'user',
+            'js_file_name': 'resendConfirmCode.js',
+        },
+    )
+
+
 @app.route('/user/login')
 @app.route('/user/login/<path:path>')
 def user_login(path: str=None):
