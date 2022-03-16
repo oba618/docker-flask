@@ -20,6 +20,7 @@ $(window).load(function(){
         XHR.addEventListener("load", function(event) {
             if(XHR.response.errorCode >= 400) {
                 Util.showAlertDanger(XHR.response);
+                postAdageButton.disabled = false;
             }
             else {
                 sessionStorage.setItem("alertString", "adagePost");
@@ -30,6 +31,7 @@ $(window).load(function(){
         // 失敗の場合
         XHR.addEventListener("error", function(event) {
             Util.showAlertDanger(Const.MESSAGE_ERROR_REQUEST);
+            postAdageButton.disabled = false;
         });
 
         // ゲストユーザ: リクエスト
