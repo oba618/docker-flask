@@ -47,7 +47,7 @@ $(window).load(function(){
         },1000);
     }
 
-    function sendHeart() {
+    function receiveHeart() {
         const XHR = new XMLHttpRequest();
 
         // 成功
@@ -70,7 +70,7 @@ $(window).load(function(){
         });
 
         // リクエスト
-        const path = [Const.BASE_PATH, "heart", userId].join("/");
+        const path = [Const.BASE_PATH, "heart"].join("/");
         XHR.responseType = "json";
         XHR.open("POST", path);
         XHR.setRequestHeader( 'Content-Type', 'application/json' );
@@ -78,7 +78,7 @@ $(window).load(function(){
         XHR.send();
     }
 
-    function updateLikePoints(adageId, episodeUserId="") {
+    function updateEpisodeLikePoints(adageId, episodeUserId) {
         /**
          * いいねポイントを更新
          */
@@ -97,7 +97,7 @@ $(window).load(function(){
 
                 // ログインしている場合、ハート履歴追加
                 if(userId && idToken) {
-                    sendHeart();
+                    receiveHeart();
                 }
                 console.log(XHR.response);
             }
@@ -109,14 +109,54 @@ $(window).load(function(){
         });
 
         // パス
-        let path = [Const.BASE_PATH, "adage", adageId].join("/");
-        if(! episodeUserId == "") {
-            path = [path, "episode", episodeUserId].join("/")
+        let path = [
+            Const.BASE_PATH,
+            "adage",adageId,
+            "episode", episodeUserId].join("/")
+        if(userId) {
+            path = [path, userId].join("/");
         }
-        
+
         // リクエスト
         XHR.responseType = "json";
         XHR.open("PATCH", path);
+        XHR.setRequestHeader( 'Content-Type', 'application/json' );
+        XHR.send();
+    }
+
+    function updateLikePoints(adageId) {
+        /**
+         * いいねポイントを更新
+         */
+        const XHR = new XMLHttpRequest();
+        
+        // 成功の場合
+        XHR.addEventListener("load", function(event) {
+
+            // 異常レスポンスの場合
+            if(XHR.response.errorCode >= 400) {
+                Util.showAlertDanger(XHR.response);
+            }
+
+            // 正常レスポンスの場合
+            else {
+
+                // ログインしている場合、ハート履歴追加
+                if(userId && idToken) {
+                    receiveHeart();
+                }
+                console.log(XHR.response);
+            }
+        });
+
+        // 失敗の場合
+        XHR.addEventListener("error", function(event) {
+            Util.showAlertDanger(Const.MESSAGE_ERROR_REQUEST);
+        });
+        
+        // リクエスト
+        XHR.responseType = "json";
+        XHR.open("PATCH", [Const.BASE_PATH, "adage", adageId].join("/"));
         XHR.setRequestHeader( 'Content-Type', 'application/json' );
         XHR.send();
     }
@@ -191,7 +231,7 @@ $(window).load(function(){
                 const likesIcon = document.getElementById("likesIcon#" + episode.key);
                 episode.likePoints++;
 
-                updateLikePoints(adage.adageId, episode.userId);
+                updateEpisodeLikePoints(adage.adageId, episode.userId);
 
                 effectHeart(likesIcon);
             },

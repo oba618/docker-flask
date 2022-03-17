@@ -15,7 +15,7 @@
                         "{{ adage.title }}"
                     </h2>
                     <div class="d-flex justify-content-center pb-3">
-                        <div :id="'likesIcon#' + adage.adageId" v-on:click="increasePoints(adage)">
+                        <div :id="'likesIcon#' + adage.adageId" @click="increasePoints(adage)">
                             <i class="far fa-heart LikesIcon-fa-heart"></i>
                         </div>
                         <div class="px-3">
