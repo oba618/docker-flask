@@ -27,8 +27,8 @@ $(window).load(function(){
 
             // 正常レスポンスの場合
             else {
-                sessionStorage.setItem("alertString", "resetPasswordSuccess")
-                window.location.href = '/user/login';
+                sessionStorage.setItem("alertString", "sendConfirmCode");
+                window.location.href = '/user/confirm';
             }
         });
     
@@ -40,7 +40,7 @@ $(window).load(function(){
 
         // リクエスト
         XHR.responseType = "json";
-        XHR.open("POST", Const.BASE_PATH + "/user/resetPassword");
+        XHR.open("POST", Const.BASE_PATH + "/user/resendConfirmCode");
         XHR.setRequestHeader( 'Content-Type', 'application/json' );
         XHR.send(JSON.stringify(formDataObj));
     });
