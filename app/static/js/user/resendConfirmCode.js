@@ -4,7 +4,8 @@ import { Util } from "../common/util.js";
 $(window).load(function(){
     "use strict";
 
-    const form = document.getElementById("userConfirmForm");
+    const form = document.getElementById("resetPasswordForm");
+    const alertDangerText = document.getElementById("alertDangerText");
 
     form.addEventListener("submit", function (event) {
         event.preventDefault();
@@ -24,9 +25,10 @@ $(window).load(function(){
                 submitButton.disabled = false;
             }
 
+            // 正常レスポンスの場合
             else {
-                sessionStorage.setItem('alertString', 'userConfirmed');
-                window.location.href = '/user/login';
+                sessionStorage.setItem("alertString", "sendConfirmCode");
+                window.location.href = '/user/confirm';
             }
         });
     
@@ -38,7 +40,7 @@ $(window).load(function(){
 
         // リクエスト
         XHR.responseType = "json";
-        XHR.open("POST", Const.BASE_PATH + "/user/confirm");
+        XHR.open("POST", Const.BASE_PATH + "/user/resendConfirmCode");
         XHR.setRequestHeader( 'Content-Type', 'application/json' );
         XHR.send(JSON.stringify(formDataObj));
     });

@@ -72,6 +72,18 @@ def user_confirm():
     )
 
 
+@app.route('/user/resendConfirmCode')
+def user_resend_confirm_code():
+    return render_template(
+        'user/resendConfirmCode.html',
+        input_values={
+            'title': '認証コードが届きませんか？',
+            'js_path': 'user',
+            'js_file_name': 'resendConfirmCode.js',
+        },
+    )
+
+
 @app.route('/user/login')
 @app.route('/user/login/<path:path>')
 def user_login(path: str=None):
@@ -168,6 +180,46 @@ def process_user_name(user_name: str):
     session['userName'] = user_name
 
     return redirect('/user/setting')
+
+
+@app.route('/terms')
+def terms_overview():
+    return render_template(
+        'terms/overview.html',
+        input_values={
+            'title': '格言共有の利用について',
+        },
+    )
+
+
+@app.route('/terms/service')
+def terms_service():
+    return render_template(
+        'terms/service.html',
+        input_values={
+            'title': '利用規約',
+        },
+    )
+
+
+@app.route('/terms/policy')
+def terms_policy():
+    return render_template(
+        'terms/policy.html',
+        input_values={
+            'title': 'プライバシーポリシー',
+        },
+    )
+
+
+@app.route('/terms/question')
+def terms_question():
+    return render_template(
+        'terms/question.html',
+        input_values={
+            'title': 'よくある質問',
+        },
+    )
 
 
 if __name__ == '__main__':

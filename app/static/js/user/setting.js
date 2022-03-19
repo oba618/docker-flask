@@ -134,6 +134,7 @@ $(window).load(function(){
                     // 異常レスポンスの場合
                     if(XHR.response.errorCode >= 400) {
                         Util.showAlertDanger(XHR.response);
+                        submitUserNameButton.disabled = false;
                     }
 
                     // 正常レスポンスの場合
@@ -146,6 +147,7 @@ $(window).load(function(){
                 // 失敗の場合
                 XHR.addEventListener("error", function(event) {
                     Util.showAlertDanger(Const.MESSAGE_ERROR_REQUEST);
+                    submitUserNameButton.disabled = false;
                 });
 
                 // リクエスト

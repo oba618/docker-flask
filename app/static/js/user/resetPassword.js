@@ -22,16 +22,20 @@ $(window).load(function(){
             // 異常レスポンスの場合
             if(XHR.response.errorCode >= 400) {
                 Util.showAlertDanger(XHR.response);
+                submitButton.disabled = false;
             }
 
             // 正常レスポンスの場合
-            sessionStorage("alertString", "resetPasswordSuccess")
-            window.location.href = '/user/login';
+            else {
+                sessionStorage.setItem("alertString", "resetPasswordSuccess")
+                window.location.href = '/user/login';
+            }
         });
     
         // 失敗の場合
         XHR.addEventListener("error", function(event) {
             Util.showAlertDanger(Const.MESSAGE_ERROR_REQUEST);
+            submitButton.disabled = false;
         });
 
         // リクエスト

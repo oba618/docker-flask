@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% if input_values.title  %}
+    <title>#格言共有 | {{ input_values.title }}</title>
+    {% else %}
+    <title>#格言共有</title>
+    {% endif %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/terms.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="body-background" >
+    <div class="">
+        <header class="fixed-top p-2 header-background">
+            <div class=" d-flex justify-content-between align-items-center">
+                <div class="">
+                    <h1 class="h4">
+                        <a href="/terms">#格言共有の利用について</a>
+                    </h3>
+                </div>
+                <nav class="header-nav-bars">
+                    <i id="navBars" class="fa-solid fa-bars size-15"></i>
+                </nav>
+                <nav class="header-nav">
+                    <a class="p-1" href="/terms">概要</a>
+                    <a class="p-1" href="/terms/service">利用規約</a>
+                    <a class="p-1" href="/terms/policy">プライバシーポリシー</a>
+                    <a class="p-1" href="/terms/question">よくある質問</a>
+                </nav>
+            </div>
+            <div id="navBarsList" class="" style="display: none;">
+                <li class="border round p-2 my-2"><a href="/terms">概要</a></li>
+                <li class="border round p-2 my-1"><a href="/terms/service">利用規約</a></li>
+                <li class="border round p-2 my-1"><a href="/terms/policy">プライバシーポリシー</a></li>
+                <li class="border round p-2 my-1"><a href="/terms/question">よくある質問</a></li>
+            </div>
+        </header>
+        <div class="header-space"></div>
+
+        {% block content %}
+        <!-- content -->
+        {% endblock %}
+
+        <footer class="mt-5">
+            <div class="footer-background d-flex justify-content-end">
+                <div class="p-4">
+                    <a href="/">#格言共有</a>
+                </div>
+                <div class="p-4">
+                    One for all All for one.
+                </div>
+            </div>
+        </footer>
+    </div>
+<script type="module" src="{{ url_for('static', filename='js/terms/layout.js') }}"></script>
+</body>
+</html>
