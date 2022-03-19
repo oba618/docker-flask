@@ -182,5 +182,45 @@ def process_user_name(user_name: str):
     return redirect('/user/setting')
 
 
+@app.route('/terms')
+def terms_overview():
+    return render_template(
+        'terms/overview.html',
+        input_values={
+            'title': '格言共有の利用について',
+        },
+    )
+
+
+@app.route('/terms/service')
+def terms_service():
+    return render_template(
+        'terms/service.html',
+        input_values={
+            'title': '利用規約',
+        },
+    )
+
+
+@app.route('/terms/policy')
+def terms_policy():
+    return render_template(
+        'terms/policy.html',
+        input_values={
+            'title': 'プライバシーポリシー',
+        },
+    )
+
+
+@app.route('/terms/question')
+def terms_question():
+    return render_template(
+        'terms/question.html',
+        input_values={
+            'title': 'よくある質問',
+        },
+    )
+
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=port)
